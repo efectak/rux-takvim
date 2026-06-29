@@ -35,6 +35,13 @@ body{background:var(--wall);font-family:'Inter',system-ui,sans-serif;color:var(-
   box-shadow:0 16px 34px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.03)}
 .hero h2{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600}
 .hero .sub{font-size:12.5px;color:var(--dim);margin-top:2px}
+.hhead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.hctrl{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.wknav{display:flex;gap:6px}
+.wknav button{width:30px;height:30px;border-radius:9px;background:var(--panel2);border:1px solid var(--line2);color:var(--gold);font-size:17px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Inter'}
+.wknav button:active{transform:scale(.92)}
+.clrsel{background:rgba(212,175,98,.12);border:1px solid var(--line2);color:var(--gold);border-radius:9px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter'}
+.clrsel:active{transform:scale(.96)}
 .strip{margin-top:14px;display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
 .strip.r2{margin-top:7px}
 .day{aspect-ratio:1;border-radius:50%;background:var(--panel2);display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -45,6 +52,7 @@ body{background:var(--wall);font-family:'Inter',system-ui,sans-serif;color:var(-
 .day.has::after{content:"";position:absolute;bottom:4px;width:4px;height:4px;border-radius:50%;background:var(--gold)}
 .day.today.has::after{background:var(--ink)}
 .day.sel{box-shadow:0 0 0 2px var(--gold)}
+.day.inrange{background:rgba(212,175,98,.17);color:var(--gold-hi)}
 .row.flash{border-color:var(--gold)!important;background:rgba(212,175,98,.18)!important}
 
 .mdiv{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:var(--dim);text-transform:uppercase;
@@ -155,8 +163,13 @@ body{background:var(--wall);font-family:'Inter',system-ui,sans-serif;color:var(-
   </div>
 
   <div class="hero">
-    <h2>Yaklaşan</h2>
-    <div class="sub">Önümüzdeki 2 hafta</div>
+    <div class="hhead">
+      <div class="hinfo"><h2 id="heroTitle">Yaklaşan</h2><div class="sub" id="heroSub">Önümüzdeki 2 hafta</div></div>
+      <div class="hctrl">
+        <button class="clrsel" id="clrSel" style="display:none">Temizle ✕</button>
+        <div class="wknav"><button id="wkPrev" aria-label="Önceki">‹</button><button id="wkNext" aria-label="Sonraki">›</button></div>
+      </div>
+    </div>
     <div class="strip" id="strip1"></div>
     <div class="strip r2" id="strip2"></div>
   </div>
@@ -210,7 +223,7 @@ async function unlock(pass){
 const AY=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
 const GUNK=['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'];
 const $=id=>document.getElementById(id);
-let ALL=[],selDate=null,lastSig='';
+let ALL=[],viewStart=null,rangeStart=null,rangeEnd=null,lastSig='';
 const hdr=()=>({apikey:SB_KEY,'Authorization':'Bearer '+SB_KEY});
 function esc(s){return String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
 function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
@@ -236,55 +249,69 @@ function setSync(t,cached){const d=new Date(t);$('syncTxt').textContent=(cached?
 function render(force){
   const today=new Date();today.setHours(0,0,0,0);
   const todayStr=ymd(today);
+  if(!viewStart) viewStart=new Date(today);
   const has=new Set(ALL.filter(x=>x.date).map(x=>x.date));
-  // hero şerit: bugünden 14 gün
+  const lo = rangeStart ? (rangeEnd&&rangeEnd<rangeStart?rangeEnd:rangeStart) : null;
+  const hi = rangeStart ? (rangeEnd?(rangeEnd<rangeStart?rangeStart:rangeEnd):rangeStart) : null;
+  // şerit: viewStart'tan 14 gün
   let s1='',s2='';
   for(let i=0;i<14;i++){
-    const d=new Date(today);d.setDate(today.getDate()+i);const k=ymd(d);
-    const cls=['day',i===0?'today':'',has.has(k)?'has':'',k===selDate?'sel':''].filter(Boolean).join(' ');
+    const d=new Date(viewStart);d.setDate(viewStart.getDate()+i);const k=ymd(d);
+    const end=(k===rangeStart||k===rangeEnd);
+    const within=(lo&&k>=lo&&k<=hi&&!end);
+    const cls=['day',k===todayStr?'today':'',has.has(k)?'has':'',end?'sel':'',within?'inrange':''].filter(Boolean).join(' ');
     const cell=`<div class="${cls}" data-d="${k}"><small>${GUNK[d.getDay()]}</small>${d.getDate()}</div>`;
     if(i<7)s1+=cell;else s2+=cell;
   }
   $('strip1').innerHTML=s1;$('strip2').innerHTML=s2;
-  document.querySelectorAll('.day[data-d]').forEach(el=>el.onclick=()=>selectDay(el.dataset.d));
+  document.querySelectorAll('.day[data-d]').forEach(el=>el.onclick=()=>tapDay(el.dataset.d));
 
-  // ajanda: gün seçiliyse sadece o gün, değilse bugünden ileri
-  let items = selDate ? ALL.filter(x=>x.date===selDate) : ALL.filter(x=>x.date&&x.date>=todayStr);
+  // ajanda: aralık seçiliyse o aralık, değilse bugünden ileri
+  let items = rangeStart ? ALL.filter(x=>x.date&&x.date>=lo&&x.date<=hi) : ALL.filter(x=>x.date&&x.date>=todayStr);
   items.sort((a,b)=>a.date===b.date?(a.time||'99').localeCompare(b.time||'99'):a.date.localeCompare(b.date));
-  const sig=(selDate||'all')+'|'+items.map(i=>i.id+(i.updatedAt||'')).join(',');
-  if(!force && sig===lastSig) return;   // değişiklik yoksa yeniden çizme (animasyon tazelenmesin)
+
+  // hero başlık/alt + temizle
+  const lbl=rangeLabel();
+  $('heroTitle').textContent=lbl||'Yaklaşan';
+  if(lbl){ $('heroSub').textContent=items.length+' içerik'+((rangeStart&&!rangeEnd)?' · bitiş için başka güne dokun':''); }
+  else { const ve=new Date(viewStart);ve.setDate(viewStart.getDate()+13);
+    $('heroSub').textContent=(ymd(viewStart)===todayStr)?'Önümüzdeki 2 hafta'
+      :(viewStart.getDate()+' '+AY[viewStart.getMonth()].slice(0,3)+' – '+ve.getDate()+' '+AY[ve.getMonth()].slice(0,3)); }
+  $('clrSel').style.display=rangeStart?'block':'none';
+
+  const sig=(rangeStart||'up')+'|'+(rangeEnd||'')+'|'+items.map(i=>i.id+(i.updatedAt||'')).join(',');
+  if(!force && sig===lastSig) return;   // değişiklik yoksa listeyi yeniden çizme (animasyon tazelenmesin)
   lastSig=sig;
 
-  let html='';
-  if(selDate){
-    const d=new Date(selDate+'T00:00:00');
-    html+=`<div class="fbar"><span class="fday">${d.getDate()} ${AY[d.getMonth()]}</span><span class="fcnt">${items.length} içerik</span><button class="clr" id="clrFilter">Tümü ✕</button></div>`;
-  }
   if(!items.length){
-    html+=`<div class="empty">${selDate?'Bu güne içerik yok.':'Yaklaşan içerik yok.<br>＋ Ekle ile başla.'}</div>`;
-    $('content').innerHTML=html;bindContent();return;
+    $('content').innerHTML=`<div class="empty">${rangeStart?'Bu aralıkta içerik yok.':'Yaklaşan içerik yok.<br>＋ Ekle ile başla.'}</div>`;
+    bindContent();return;
   }
-  let idx=0;
-  if(selDate){
-    html+='<div class="list">';
-    for(const x of items) html+=row(x,new Date(x.date+'T00:00:00'),idx++);
-    html+='</div>';
-  } else {
-    let curM='';
-    for(const x of items){
-      const d=new Date(x.date+'T00:00:00');const mk=AY[d.getMonth()]+' '+d.getFullYear();
-      if(mk!==curM){ if(curM)html+='</div>'; curM=mk; html+=`<div class="mdiv">${mk}</div><div class="list">`; }
-      html+=row(x,d,idx++);
-    }
-    html+='</div>';
+  let html='',curM='',idx=0;
+  for(const x of items){
+    const d=new Date(x.date+'T00:00:00');const mk=AY[d.getMonth()]+' '+d.getFullYear();
+    if(mk!==curM){ if(curM)html+='</div>'; curM=mk; html+=`<div class="mdiv">${mk}</div><div class="list">`; }
+    html+=row(x,d,idx++);
   }
+  html+='</div>';
   $('content').innerHTML=html;bindContent();
 }
-function bindContent(){
-  document.querySelectorAll('.row').forEach(el=>el.onclick=()=>openDetail(el.dataset.id));
-  const c=$('clrFilter'); if(c)c.onclick=()=>{selDate=null;render(true);};
+function rangeLabel(){
+  if(!rangeStart)return null;
+  const a=rangeStart,b=rangeEnd,da=new Date(a+'T00:00:00');
+  if(!b||a===b)return da.getDate()+' '+AY[da.getMonth()];
+  const lo=a<b?a:b,hi=a<b?b:a,dl=new Date(lo+'T00:00:00'),dh=new Date(hi+'T00:00:00');
+  if(dl.getMonth()===dh.getMonth())return dl.getDate()+'–'+dh.getDate()+' '+AY[dl.getMonth()];
+  return dl.getDate()+' '+AY[dl.getMonth()].slice(0,3)+' – '+dh.getDate()+' '+AY[dh.getMonth()].slice(0,3);
 }
-function selectDay(date){ selDate=(selDate===date?null:date); render(true); }
+function bindContent(){ document.querySelectorAll('.row').forEach(el=>el.onclick=()=>openDetail(el.dataset.id)); }
+function tapDay(k){
+  if(!rangeStart || (rangeStart&&rangeEnd)){ rangeStart=k; rangeEnd=null; }
+  else if(k===rangeStart){ rangeStart=null; rangeEnd=null; }
+  else { rangeEnd=k; }
+  render(true);
+}
+function clearSel(){ rangeStart=null; rangeEnd=null; render(true); }
 function row(x,d,idx){
   const appr=x.approval==='onaylandi';
   const sub=[x.time,x.kategori,x.assignee==='yasin'?'Yasin':x.assignee==='efe'?'Efe':''].filter(Boolean).join(' · ');
@@ -307,7 +334,10 @@ function segVal(box){const b=box.querySelector('button.on');return b?b.dataset.v
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200);}
 
 /* ---- ekle ---- */
-$('fab').onclick=()=>{$('f_title').value='';$('f_time').value='';$('f_date').value=ymd(new Date());openSheet('addSheet');setTimeout(()=>$('f_title').focus(),250);};
+$('fab').onclick=()=>{$('f_title').value='';$('f_time').value='';$('f_date').value=rangeStart||ymd(new Date());openSheet('addSheet');setTimeout(()=>$('f_title').focus(),250);};
+$('wkPrev').onclick=()=>{if(viewStart){viewStart.setDate(viewStart.getDate()-7);render(false);}};
+$('wkNext').onclick=()=>{if(viewStart){viewStart.setDate(viewStart.getDate()+7);render(false);}};
+$('clrSel').onclick=clearSel;
 $('saveBtn').onclick=async()=>{
   const title=$('f_title').value.trim();const date=$('f_date').value;
   if(!title){toast('Başlık gerekli');return;}

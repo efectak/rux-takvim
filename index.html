@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1115">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="RUX Takvim">
+<title>RUX Takvim</title>
+<style>
+:root{
+  --bg:#0f1115; --card:#171a21; --card2:#1c212b; --ink:#e7e9ee; --mut:#9aa3b2;
+  --gold:#c9a227; --line:#262b35; --line2:#323a48;
+  --reels:#a855f7; --cekim:#e0a800; --post:#3b82f6; --story:#ec4899; --def:#6b7280;
+  --ok:#22c55e; --warn:#f59e0b; --yasin:#14b8a6; --efe:#3b82f6;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased}
+body{padding-bottom:40px}
+header{position:sticky;top:0;z-index:10;
+  background:rgba(15,17,21,.94);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding:max(12px,env(safe-area-inset-top)) 14px 10px}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand h1{font-size:18px;margin:0;letter-spacing:.02em}
+.brand h1 b{color:var(--gold)}
+.sync{font-size:11px;color:var(--mut);text-align:right;line-height:1.3}
+.refresh{background:var(--card2);border:1px solid var(--line2);color:var(--ink);
+  border-radius:10px;padding:7px 10px;font-size:13px;font-weight:600;cursor:pointer}
+.refresh:active{transform:scale(.96)}
+.nav{display:flex;align-items:center;justify-content:space-between;margin-top:10px;gap:8px}
+.nav button{background:var(--card2);border:1px solid var(--line2);color:var(--ink);
+  width:40px;height:36px;border-radius:10px;font-size:18px;cursor:pointer}
+.nav button:active{transform:scale(.95)}
+.nav .mlabel{flex:1;text-align:center;font-weight:700;font-size:15px}
+.nav .mlabel small{display:block;color:var(--mut);font-weight:500;font-size:11px;margin-top:1px}
+.chips{display:flex;gap:7px;overflow-x:auto;padding:10px 14px 4px;-webkit-overflow-scrolling:touch}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;background:var(--card);border:1px solid var(--line2);color:var(--mut);
+  border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.chip.on{background:var(--gold);border-color:var(--gold);color:#1a1500}
+.wrap{padding:6px 14px 0}
+.daygroup{margin-top:16px}
+.dayhd{display:flex;align-items:baseline;gap:8px;margin:0 2px 8px;
+  position:sticky;top:128px;background:var(--bg);padding:4px 0;z-index:5}
+.dayhd .dnum{font-size:22px;font-weight:800;color:var(--gold);line-height:1}
+.dayhd .dwd{font-size:12px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.dayhd .today{margin-left:auto;background:var(--gold);color:#1a1500;font-size:10px;font-weight:800;
+  padding:2px 8px;border-radius:999px;text-transform:uppercase}
+.card{background:var(--card);border:1px solid var(--line);border-left-width:4px;
+  border-radius:12px;padding:11px 13px;margin-bottom:9px}
+.card .top{display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap}
+.card .time{font-size:13px;font-weight:700;color:var(--ink);background:var(--card2);
+  padding:2px 8px;border-radius:7px;border:1px solid var(--line2)}
+.card .title{font-size:15.5px;font-weight:700;margin:3px 0 2px;line-height:1.3}
+.badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;line-height:1.5}
+.b-reels{background:rgba(168,85,247,.16);color:#c79cf5}
+.b-cekim{background:rgba(224,168,0,.16);color:#e8c45e}
+.b-post{background:rgba(59,130,246,.16);color:#84b0f5}
+.b-def{background:rgba(107,114,128,.18);color:#aab2bf}
+.b-ok{background:rgba(34,197,94,.16);color:#69d68d}
+.b-taslak{background:rgba(245,158,11,.14);color:#e3b261}
+.who{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px}
+.who-yasin{background:rgba(20,184,166,.18);color:#5fd6c8}
+.who-efe{background:rgba(59,130,246,.18);color:#84b0f5}
+.meta{font-size:13px;color:var(--mut);margin-top:6px;line-height:1.45}
+.tags{margin-top:6px;display:flex;gap:5px;flex-wrap:wrap}
+.tag{font-size:10.5px;color:var(--mut);background:var(--card2);border:1px solid var(--line);
+  padding:1px 7px;border-radius:6px}
+.empty{text-align:center;color:var(--mut);padding:50px 20px;font-size:14px}
+.empty .big{font-size:40px;margin-bottom:10px}
+.loading{text-align:center;color:var(--mut);padding:60px 20px}
+.spin{width:34px;height:34px;border:3px solid var(--line2);border-top-color:var(--gold);
+  border-radius:50%;animation:sp 1s linear infinite;margin:0 auto 14px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.err{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.4);color:#f3a3a3;
+  border-radius:10px;padding:12px;margin:14px;font-size:13px}
+.count{font-size:12px;color:var(--mut);text-align:center;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.gate{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
+.gatebox{width:100%;max-width:320px;text-align:center}
+.glogo{font-size:26px;font-weight:800;margin-bottom:6px}
+.glogo b{color:var(--gold)}
+.gsub{color:var(--mut);font-size:14px;margin-bottom:22px}
+.passinput{width:100%;background:var(--card);border:1px solid var(--line2);color:var(--ink);border-radius:12px;padding:14px;font-size:17px;text-align:center;letter-spacing:.08em;margin-bottom:12px}
+.passinput:focus{outline:none;border-color:var(--gold)}
+.gatebtn{width:100%;background:var(--gold);color:#1a1500;border:none;border-radius:12px;padding:14px;font-size:16px;font-weight:800;cursor:pointer}
+.gatebtn:active{transform:scale(.98)}
+.gateerr{color:#f3a3a3;font-size:13px;margin-top:12px;min-height:18px}
+</style>
+</head>
+<body>
+<div id="gate" class="gate" style="display:none">
+  <div class="gatebox">
+    <div class="glogo"><b>RUX</b> Takvim</div>
+    <div class="gsub">İçerik takvimini görmek için şifre gir</div>
+    <input id="passInput" class="passinput" type="password" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Şifre" />
+    <button id="gateBtn" class="gatebtn">Gir</button>
+    <div id="gateErr" class="gateerr"></div>
+  </div>
+</div>
+<header>
+  <div class="brand">
+    <h1><b>RUX</b> Takvim</h1>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="sync" id="sync">yükleniyor…</div>
+      <button class="refresh" id="refresh">↻</button>
+    </div>
+  </div>
+  <div class="nav">
+    <button id="prev">‹</button>
+    <div class="mlabel" id="mlabel">—<small id="mcount"></small></div>
+    <button id="next">›</button>
+  </div>
+</header>
+
+<div class="chips" id="chips">
+  <div class="chip on" data-f="all">Hepsi</div>
+  <div class="chip" data-f="yasin">📸 Yasin</div>
+  <div class="chip" data-f="Çekim">Çekim</div>
+  <div class="chip" data-f="Reels">Reels</div>
+  <div class="chip" data-f="Post">Post</div>
+</div>
+
+<div class="wrap" id="app">
+  <div class="loading"><div class="spin"></div>Bulut takvimi yükleniyor…</div>
+</div>
+
+<script>
+const SB_URL = 'https://vigskbrwdosehqgldvay.supabase.co';
+let SB_KEY = null; // şifre ile çözülür
+const ENC = {salt:'laLGKw8GC7hjiQvTY1DZOw==', iv:'f5yh+3FbeyB7ag+e', cipher:'fVk/K56o5Dedcn3u2YlCokuH+DgvslrphjR6nZbcO6bxueQxDGoCu7ewQa3JYZ6vELgVCVNsd++Fvh24GRo='};
+const b64d = s => Uint8Array.from(atob(s), c=>c.charCodeAt(0));
+async function unlock(pass){
+  const enc=new TextEncoder();
+  const km=await crypto.subtle.importKey('raw',enc.encode(pass),'PBKDF2',false,['deriveKey']);
+  const ak=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64d(ENC.salt),iterations:100000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+  const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64d(ENC.iv)},ak,b64d(ENC.cipher));
+  return new TextDecoder().decode(plain); // yanlış şifrede hata fırlatır
+}
+const AY = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+const GUN = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+const GUNK = ['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'];
+
+let ALL = [];          // tüm tarihli içerikler
+let filter = 'all';
+let cursor = new Date(); cursor.setDate(1);
+
+const $ = id => document.getElementById(id);
+
+function catClass(k){
+  if(k==='Reels') return 'b-reels'; if(k==='Çekim') return 'b-cekim';
+  if(k==='Post') return 'b-post'; return 'b-def';
+}
+function catColor(k){
+  if(k==='Reels') return 'var(--reels)'; if(k==='Çekim') return 'var(--cekim)';
+  if(k==='Post') return 'var(--post)'; return 'var(--def)';
+}
+function esc(s){return String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+
+async function load(){
+  try{
+    const r = await fetch(`${SB_URL}/rest/v1/content?select=id,data,deleted`, {headers:{apikey:SB_KEY}});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const rows = await r.json();
+    const items = rows.filter(x=>!x.deleted).map(x=>x.data).filter(x=>x && !x.isTemplate && x.date);
+    ALL = items;
+    localStorage.setItem('rux_cache', JSON.stringify({t:Date.now(), items}));
+    setSync(Date.now(), false);
+    // ilk açılışta dolu aya atla
+    if(!hasItems(cursor) && ALL.length){ jumpToNearest(); }
+    render();
+  }catch(e){
+    const cache = JSON.parse(localStorage.getItem('rux_cache')||'null');
+    if(cache && cache.items){ ALL = cache.items; setSync(cache.t, true); if(!hasItems(cursor)&&ALL.length)jumpToNearest(); render(); }
+    else { $('app').innerHTML = `<div class="err">Bağlantı kurulamadı (${esc(e.message)}). İnternetini kontrol edip ↻ ile tekrar dene.</div>`; $('sync').textContent='bağlantı yok'; }
+  }
+}
+
+function setSync(t, cached){
+  const d = new Date(t);
+  const hh = String(d.getHours()).padStart(2,'0'), mm = String(d.getMinutes()).padStart(2,'0');
+  $('sync').innerHTML = (cached?'📴 önbellek<br>':'☁ güncel<br>') + `${hh}:${mm}`;
+}
+function ym(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');}
+function hasItems(d){const k=ym(d);return ALL.some(x=>x.date.slice(0,7)===k && passFilter(x));}
+function jumpToNearest(){
+  const months=[...new Set(ALL.map(x=>x.date.slice(0,7)))].sort();
+  const now=ym(new Date());
+  const pick = months.find(m=>m>=now) || months[months.length-1];
+  if(pick){ cursor=new Date(pick+'-01T00:00:00'); }
+}
+function passFilter(x){
+  if(filter==='all') return true;
+  if(filter==='yasin') return x.assignee==='yasin' || x.kategori==='Çekim';
+  return x.kategori===filter;
+}
+
+function render(){
+  const k = ym(cursor);
+  $('mlabel').firstChild.textContent = AY[cursor.getMonth()]+' '+cursor.getFullYear();
+  let list = ALL.filter(x=>x.date.slice(0,7)===k && passFilter(x));
+  list.sort((a,b)=> (a.date===b.date ? (a.time||'99:99').localeCompare(b.time||'99:99') : a.date.localeCompare(b.date)));
+  $('mcount').textContent = list.length ? list.length+' içerik' : '';
+
+  if(!list.length){
+    $('app').innerHTML = `<div class="empty"><div class="big">🗓️</div>Bu ayda${filter!=='all'?' (filtreyle)':''} içerik yok.<br>Ok tuşlarıyla başka aya geç.</div>`;
+    return;
+  }
+  const today = new Date(); const todayStr = today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+  $('app').innerHTML = buildGroups(list, todayStr);
+}
+
+function buildGroups(list, todayStr){
+  const groups={};
+  for(const x of list){ (groups[x.date]=groups[x.date]||[]).push(x); }
+  let html='';
+  for(const date of Object.keys(groups).sort()){
+    const d=new Date(date+'T00:00:00');
+    const isToday=date===todayStr;
+    html += `<div class="daygroup"><div class="dayhd"><span class="dnum">${d.getDate()}</span><span class="dwd">${GUN[d.getDay()]}</span>${isToday?'<span class="today">Bugün</span>':''}</div>`;
+    for(const x of groups[date]) html += card(x);
+    html += `</div>`;
+  }
+  html += `<div class="count">Toplam ${list.length} içerik · ☁ canlı buluttan</div>`;
+  return html;
+}
+
+function card(x){
+  const appr = x.approval==='onaylandi';
+  const tags = (x.tags||[]).filter(Boolean);
+  const note = x.notes || x.caption || '';
+  const noteShort = note.length>120 ? note.slice(0,120)+'…' : note;
+  return `<div class="card" style="border-left-color:${catColor(x.kategori)}">
+    <div class="top">
+      ${x.time?`<span class="time">${esc(x.time)}</span>`:''}
+      <span class="badge ${catClass(x.kategori)}">${esc(x.kategori||'—')}</span>
+      ${appr?'<span class="badge b-ok">✓ Onaylı</span>':'<span class="badge b-taslak">Taslak</span>'}
+      ${x.assignee==='yasin'?'<span class="who who-yasin">Yasin</span>':x.assignee==='efe'?'<span class="who who-efe">Efe</span>':''}
+    </div>
+    <div class="title">${esc(x.title||'(başlıksız)')}</div>
+    ${noteShort?`<div class="meta">${esc(noteShort)}</div>`:''}
+    ${tags.length?`<div class="tags">${tags.map(t=>`<span class="tag">#${esc(t)}</span>`).join('')}</div>`:''}
+  </div>`;
+}
+
+// olaylar
+$('prev').onclick=()=>{cursor.setMonth(cursor.getMonth()-1);render();};
+$('next').onclick=()=>{cursor.setMonth(cursor.getMonth()+1);render();};
+$('refresh').onclick=()=>{$('sync').textContent='…';load();};
+$('chips').addEventListener('click',e=>{
+  const c=e.target.closest('.chip'); if(!c)return;
+  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+  c.classList.add('on'); filter=c.dataset.f;
+  if(!hasItems(cursor)&&ALL.length)jumpToNearest();
+  render();
+});
+// uygulamaya geri dönünce tazele
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) load(); });
+
+// şifre çözülünce çalışır: önce önbellekten anında göster, sonra canlı çek
+function startApp(){
+  const cache = JSON.parse(localStorage.getItem('rux_cache')||'null');
+  if(cache && cache.items){ ALL=cache.items.filter(x=>x&&x.date&&!x.isTemplate); setSync(cache.t,true); if(!hasItems(cursor)&&ALL.length)jumpToNearest(); render(); }
+  load();
+}
+async function tryUnlock(pass, fromSaved){
+  try{
+    SB_KEY = await unlock(pass);
+    localStorage.setItem('rux_pass', pass);
+    $('gate').style.display='none';
+    startApp();
+  }catch(e){
+    if(fromSaved){ localStorage.removeItem('rux_pass'); $('gate').style.display='flex'; }
+    else { $('gateErr').textContent='Şifre yanlış, tekrar dene.'; $('passInput').value=''; $('passInput').focus(); }
+  }
+}
+$('gateBtn').onclick=()=>{ const v=$('passInput').value.trim(); if(v){ $('gateErr').textContent=''; tryUnlock(v,false); } };
+$('passInput').addEventListener('keydown',e=>{ if(e.key==='Enter') $('gateBtn').click(); });
+(function boot(){
+  const saved=localStorage.getItem('rux_pass');
+  if(saved){ tryUnlock(saved,true); } else { $('gate').style.display='flex'; $('passInput').focus(); }
+})();
+</script>
+</body>
+</html>

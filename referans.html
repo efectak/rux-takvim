@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f2f0ec">
+<title>RUX Takvim — Referans Yön</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#e9e6e0;font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  display:flex;justify-content:center;min-height:100vh}
+.app{width:100%;max-width:430px;background:#f3f1ed;min-height:100vh;
+  padding:max(16px,env(safe-area-inset-top)) 16px 110px;position:relative;color:#1a1a1e}
+
+/* üst başlık */
+.top{display:flex;align-items:center;justify-content:space-between;padding:8px 4px 18px}
+.brand{font-size:19px;font-weight:800;letter-spacing:.01em}
+.brand b{color:#bb8b2a}
+.av{width:34px;height:34px;border-radius:50%;background:#1a1a1e;color:#f3f1ed;
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+
+/* yaklaşan hero kartı */
+.hero{background:#17171b;border-radius:24px;padding:18px 18px 16px;color:#f3f1ed;
+  box-shadow:0 14px 30px rgba(0,0,0,.16)}
+.hero h2{font-size:17px;font-weight:700}
+.hero .sub{font-size:13px;color:#8a8a92;margin-top:2px}
+.strip{margin-top:16px;display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
+.strip.row2{margin-top:8px}
+.day{aspect-ratio:1;border-radius:50%;background:#26262c;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#cfcfd6;position:relative}
+.day.today{background:#f3f1ed;color:#17171b;font-weight:800}
+.day.has::after{content:"";position:absolute;bottom:5px;width:4px;height:4px;border-radius:50%;background:#d9a93a}
+.day.today.has::after{background:#bb8b2a}
+
+/* ajanda listesi */
+.list{margin-top:20px;display:flex;flex-direction:column;gap:10px}
+.row{display:flex;align-items:center;gap:13px;background:#fbfaf8;border-radius:16px;padding:12px 14px;
+  box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.date{width:38px;text-align:center;flex:0 0 auto}
+.date .m{font-size:11px;font-weight:700;color:#a0978a;text-transform:uppercase;letter-spacing:.03em}
+.date .d{font-size:20px;font-weight:800;line-height:1;margin-top:1px}
+.ico{width:42px;height:42px;border-radius:13px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:18px;font-weight:800;box-shadow:0 4px 10px rgba(0,0,0,.12)}
+.ico.cekim{background:linear-gradient(150deg,#e8b04e,#b9791f)}
+.ico.reels{background:linear-gradient(150deg,#a875f0,#6d3fc7)}
+.ico.post{background:linear-gradient(150deg,#5aa6f0,#2f6fc7)}
+.body{flex:1;min-width:0}
+.body .t{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.body .s{font-size:12.5px;color:#9a948b;margin-top:2px}
+.chip{width:28px;height:28px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:14px}
+.chip.ok{background:#e3f3e8;color:#2f9e57}
+.chip.lock{background:#efece7;color:#b3aba0}
+
+/* alt yüzen nav */
+.nav{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#17171b;
+  border-radius:999px;padding:11px 10px;display:flex;gap:6px;box-shadow:0 12px 28px rgba(0,0,0,.28);z-index:20}
+.nav a{width:46px;height:40px;border-radius:999px;display:flex;align-items:center;justify-content:center;
+  color:#8a8a92;font-size:19px;text-decoration:none}
+.nav a.on{background:#2c2c33;color:#f3f1ed}
+.note{max-width:430px;text-align:center;color:#8b857b;font-size:12.5px;margin:18px auto 0;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="brand"><b>RUX</b> Takvim</div>
+    <div class="av">RX</div>
+  </div>
+
+  <div class="hero">
+    <h2>Yaklaşan</h2>
+    <div class="sub">Önümüzdeki 2 hafta</div>
+    <div class="strip">
+      <div class="day">30</div>
+      <div class="day today has">1</div>
+      <div class="day has">2</div>
+      <div class="day">3</div>
+      <div class="day">4</div>
+      <div class="day has">5</div>
+      <div class="day">6</div>
+    </div>
+    <div class="strip row2">
+      <div class="day">7</div>
+      <div class="day">8</div>
+      <div class="day">9</div>
+      <div class="day">10</div>
+      <div class="day">11</div>
+      <div class="day has">12</div>
+      <div class="day">13</div>
+    </div>
+  </div>
+
+  <div class="list">
+    <div class="row">
+      <div class="date"><div class="m">Tem</div><div class="d">02</div></div>
+      <div class="ico cekim">◎</div>
+      <div class="body"><div class="t">Kına Çekimi</div><div class="s">15:00 · Çekim · Yasin</div></div>
+      <div class="chip lock">🔒</div>
+    </div>
+    <div class="row">
+      <div class="date"><div class="m">Tem</div><div class="d">05</div></div>
+      <div class="ico reels">▶</div>
+      <div class="body"><div class="t">Reels Senaryosu</div><div class="s">Onaylı · Reels</div></div>
+      <div class="chip ok">✓</div>
+    </div>
+    <div class="row">
+      <div class="date"><div class="m">Tem</div><div class="d">12</div></div>
+      <div class="ico cekim">◎</div>
+      <div class="body"><div class="t">Düğün Video Fotoğraf</div><div class="s">15:00 · Çekim · Yasin</div></div>
+      <div class="chip lock">🔒</div>
+    </div>
+    <div class="row">
+      <div class="date"><div class="m">Tem</div><div class="d">15</div></div>
+      <div class="ico post">▦</div>
+      <div class="body"><div class="t">Dış Çekim Post</div><div class="s">Taslak · Post</div></div>
+      <div class="chip lock">🔒</div>
+    </div>
+    <div class="row">
+      <div class="date"><div class="m">Tem</div><div class="d">21</div></div>
+      <div class="ico reels">▶</div>
+      <div class="body"><div class="t">Düğün Hikayesi</div><div class="s">14:00 · Reels</div></div>
+      <div class="chip ok">✓</div>
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <a class="on" href="#">⌂</a>
+  <a href="#">▦</a>
+  <a href="#">≣</a>
+  <a href="#">⋯</a>
+</div>
+
+<div class="note">Senin referansının RUX'a uyarlanmış hali (örnek içerik) — açık, premium-minimal, RUX altın aksanı.</div>
+</body>
+</html>

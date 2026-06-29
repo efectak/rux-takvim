@@ -3,285 +3,342 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0f1115">
+<meta name="theme-color" content="#0a0806">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="RUX Takvim">
 <title>RUX Takvim</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
 :root{
-  --bg:#0f1115; --card:#171a21; --card2:#1c212b; --ink:#e7e9ee; --mut:#9aa3b2;
-  --gold:#c9a227; --line:#262b35; --line2:#323a48;
-  --reels:#a855f7; --cekim:#e0a800; --post:#3b82f6; --story:#ec4899; --def:#6b7280;
-  --ok:#22c55e; --warn:#f59e0b; --yasin:#14b8a6; --efe:#3b82f6;
+  --wall:#0a0806; --panel:#15110a; --panel2:#1c1710;
+  --gold:#d4af62; --gold-hi:#f2d488; --gold-lo:#a9802f;
+  --cream:#efe7d6; --dim:#8a7f6b; --ink:#15110a;
+  --line:rgba(212,175,98,.15); --line2:rgba(212,175,98,.28);
+  --ok:#84d39b; --danger:#e07a6b;
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--ink);
-  font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  -webkit-font-smoothing:antialiased}
-body{padding-bottom:40px}
-header{position:sticky;top:0;z-index:10;
-  background:rgba(15,17,21,.94);backdrop-filter:blur(10px);
-  border-bottom:1px solid var(--line);padding:max(12px,env(safe-area-inset-top)) 14px 10px}
-.brand{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.brand h1{font-size:18px;margin:0;letter-spacing:.02em}
-.brand h1 b{color:var(--gold)}
-.sync{font-size:11px;color:var(--mut);text-align:right;line-height:1.3}
-.refresh{background:var(--card2);border:1px solid var(--line2);color:var(--ink);
-  border-radius:10px;padding:7px 10px;font-size:13px;font-weight:600;cursor:pointer}
-.refresh:active{transform:scale(.96)}
-.nav{display:flex;align-items:center;justify-content:space-between;margin-top:10px;gap:8px}
-.nav button{background:var(--card2);border:1px solid var(--line2);color:var(--ink);
-  width:40px;height:36px;border-radius:10px;font-size:18px;cursor:pointer}
-.nav button:active{transform:scale(.95)}
-.nav .mlabel{flex:1;text-align:center;font-weight:700;font-size:15px}
-.nav .mlabel small{display:block;color:var(--mut);font-weight:500;font-size:11px;margin-top:1px}
-.chips{display:flex;gap:7px;overflow-x:auto;padding:10px 14px 4px;-webkit-overflow-scrolling:touch}
-.chips::-webkit-scrollbar{display:none}
-.chip{flex:0 0 auto;background:var(--card);border:1px solid var(--line2);color:var(--mut);
-  border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
-.chip.on{background:var(--gold);border-color:var(--gold);color:#1a1500}
-.wrap{padding:6px 14px 0}
-.daygroup{margin-top:16px}
-.dayhd{display:flex;align-items:baseline;gap:8px;margin:0 2px 8px;
-  position:sticky;top:128px;background:var(--bg);padding:4px 0;z-index:5}
-.dayhd .dnum{font-size:22px;font-weight:800;color:var(--gold);line-height:1}
-.dayhd .dwd{font-size:12px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
-.dayhd .today{margin-left:auto;background:var(--gold);color:#1a1500;font-size:10px;font-weight:800;
-  padding:2px 8px;border-radius:999px;text-transform:uppercase}
-.card{background:var(--card);border:1px solid var(--line);border-left-width:4px;
-  border-radius:12px;padding:11px 13px;margin-bottom:9px}
-.card .top{display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap}
-.card .time{font-size:13px;font-weight:700;color:var(--ink);background:var(--card2);
-  padding:2px 8px;border-radius:7px;border:1px solid var(--line2)}
-.card .title{font-size:15.5px;font-weight:700;margin:3px 0 2px;line-height:1.3}
-.badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;line-height:1.5}
-.b-reels{background:rgba(168,85,247,.16);color:#c79cf5}
-.b-cekim{background:rgba(224,168,0,.16);color:#e8c45e}
-.b-post{background:rgba(59,130,246,.16);color:#84b0f5}
-.b-def{background:rgba(107,114,128,.18);color:#aab2bf}
-.b-ok{background:rgba(34,197,94,.16);color:#69d68d}
-.b-taslak{background:rgba(245,158,11,.14);color:#e3b261}
-.who{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px}
-.who-yasin{background:rgba(20,184,166,.18);color:#5fd6c8}
-.who-efe{background:rgba(59,130,246,.18);color:#84b0f5}
-.meta{font-size:13px;color:var(--mut);margin-top:6px;line-height:1.45}
-.tags{margin-top:6px;display:flex;gap:5px;flex-wrap:wrap}
-.tag{font-size:10.5px;color:var(--mut);background:var(--card2);border:1px solid var(--line);
-  padding:1px 7px;border-radius:6px}
-.empty{text-align:center;color:var(--mut);padding:50px 20px;font-size:14px}
-.empty .big{font-size:40px;margin-bottom:10px}
-.loading{text-align:center;color:var(--mut);padding:60px 20px}
-.spin{width:34px;height:34px;border:3px solid var(--line2);border-top-color:var(--gold);
-  border-radius:50%;animation:sp 1s linear infinite;margin:0 auto 14px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--wall);font-family:'Inter',system-ui,sans-serif;color:var(--cream);overflow-x:hidden}
+.app{width:100%;max-width:520px;margin:0 auto;min-height:100%;
+  background:radial-gradient(130% 55% at 50% -8%,#161007 0%,#0d0b07 46%,#0a0806 100%);
+  padding:max(14px,env(safe-area-inset-top)) 15px calc(120px + env(safe-area-inset-bottom));position:relative}
+
+.top{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 16px}
+.brand{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;color:var(--cream)}
+.brand b{color:var(--gold)}
+.sync{font-size:11px;color:var(--dim);display:flex;align-items:center;gap:6px}
+.sync .r{width:30px;height:30px;border-radius:50%;background:rgba(212,175,98,.08);border:1px solid var(--line2);
+  display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:14px;cursor:pointer}
+
+.hero{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:17px;
+  box-shadow:0 16px 34px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.03)}
+.hero h2{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600}
+.hero .sub{font-size:12.5px;color:var(--dim);margin-top:2px}
+.strip{margin-top:14px;display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.strip.r2{margin-top:7px}
+.day{aspect-ratio:1;border-radius:50%;background:var(--panel2);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:500;color:#cbbfa6;position:relative}
+.day small{font-size:8px;color:var(--dim);font-family:'Inter';font-weight:600;margin-bottom:1px}
+.day.today{background:var(--gold);color:var(--ink);font-weight:700;box-shadow:0 0 16px rgba(212,175,98,.4)}
+.day.today small{color:rgba(21,17,10,.6)}
+.day.has::after{content:"";position:absolute;bottom:4px;width:4px;height:4px;border-radius:50%;background:var(--gold)}
+.day.today.has::after{background:var(--ink)}
+
+.mdiv{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:var(--dim);text-transform:uppercase;
+  letter-spacing:.08em;margin:22px 4px 10px}
+.list{display:flex;flex-direction:column;gap:9px}
+.row{display:flex;align-items:center;gap:12px;background:rgba(212,175,98,.045);border:1px solid var(--line);
+  border-radius:16px;padding:11px 13px;cursor:pointer;transition:background .15s}
+.row:active{background:rgba(212,175,98,.1)}
+.date{width:36px;text-align:center;flex:0 0 auto}
+.date .m{font-size:10.5px;font-weight:600;color:var(--dim);text-transform:uppercase}
+.date .d{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;line-height:1;margin-top:2px}
+.ico{width:40px;height:40px;border-radius:12px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 4px 11px rgba(0,0,0,.35)}
+.ico.cekim{background:linear-gradient(150deg,#f2d488,#a9802f);color:#2a2008}
+.ico.reels{background:linear-gradient(150deg,#b98ed8,#6d44a0);color:#fff}
+.ico.post{background:linear-gradient(150deg,#6fa6dd,#345d8a);color:#fff}
+.ico.def{background:linear-gradient(150deg,#5a564e,#34312b);color:#cbbfa6}
+.body{flex:1;min-width:0}
+.body .t{font-size:14.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.body .s{font-size:12px;color:var(--dim);margin-top:2px}
+.chip{width:26px;height:26px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:12px;border:1px solid transparent}
+.chip.ok{background:rgba(110,190,130,.14);color:var(--ok);border-color:rgba(110,190,130,.3)}
+.chip.lock{background:rgba(212,175,98,.10);color:var(--gold);border-color:var(--line2)}
+
+.fab{position:fixed;bottom:calc(24px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);
+  background:var(--gold);color:var(--ink);border:none;border-radius:999px;padding:14px 26px;
+  font-family:'Inter';font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;
+  box-shadow:0 12px 28px rgba(212,175,98,.32);z-index:30}
+.fab:active{transform:translateX(-50%) scale(.97)}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px);z-index:40;display:none}
+.scrim.on{display:block}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:50;background:#100d08;border:1px solid var(--line2);
+  border-bottom:none;border-radius:24px 24px 0 0;padding:20px 18px calc(26px + env(safe-area-inset-bottom));
+  max-width:520px;margin:0 auto;transform:translateY(100%);transition:transform .26s cubic-bezier(.3,.8,.3,1)}
+.sheet.on{transform:translateY(0)}
+.sheet h3{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;margin-bottom:16px}
+.fld{margin-bottom:14px}
+.fld label{display:block;font-size:12px;color:var(--dim);margin-bottom:6px;font-weight:600}
+.fld input{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px;
+  color:var(--cream);font-size:15px;font-family:'Inter'}
+.fld input:focus{outline:none;border-color:var(--gold)}
+.seg{display:flex;gap:7px}
+.seg button{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:10px 4px;
+  color:var(--dim);font-size:13px;font-weight:600;cursor:pointer}
+.seg button.on{background:rgba(212,175,98,.14);border-color:var(--gold);color:var(--gold)}
+.srow{display:flex;gap:11px}
+.srow .fld{flex:1}
+.save{width:100%;background:var(--gold);color:var(--ink);border:none;border-radius:13px;padding:14px;
+  font-size:15px;font-weight:700;cursor:pointer;margin-top:6px;font-family:'Inter'}
+.save:active{transform:scale(.99)}
+.save[disabled]{opacity:.5}
+.cancel{width:100%;background:none;border:none;color:var(--dim);padding:12px;font-size:14px;cursor:pointer;margin-top:4px}
+
+/* detail sheet */
+.dl{font-size:13px;color:var(--dim);margin:4px 0}
+.dl b{color:var(--cream);font-weight:600}
+.del{width:100%;background:rgba(224,122,107,.12);color:var(--danger);border:1px solid rgba(224,122,107,.35);
+  border-radius:13px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;margin-top:14px}
+.del.confirm{background:var(--danger);color:#1a0d0a;border-color:var(--danger)}
+
+.toast{position:fixed;bottom:calc(96px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--panel);border:1px solid var(--line2);color:var(--cream);padding:11px 18px;border-radius:999px;
+  font-size:13.5px;font-weight:600;z-index:60;opacity:0;transition:.25s;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.empty{text-align:center;color:var(--dim);padding:40px 20px;font-size:14px}
+.loading{text-align:center;color:var(--dim);padding:60px 20px}
+.spin{width:32px;height:32px;border:3px solid var(--line2);border-top-color:var(--gold);border-radius:50%;animation:sp 1s linear infinite;margin:0 auto 12px}
 @keyframes sp{to{transform:rotate(360deg)}}
-.err{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.4);color:#f3a3a3;
-  border-radius:10px;padding:12px;margin:14px;font-size:13px}
-.count{font-size:12px;color:var(--mut);text-align:center;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
-.gate{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
+
+/* gate */
+.gate{position:fixed;inset:0;z-index:100;background:var(--wall);display:none;align-items:center;justify-content:center;padding:24px}
 .gatebox{width:100%;max-width:320px;text-align:center}
-.glogo{font-size:26px;font-weight:800;margin-bottom:6px}
+.glogo{font-family:'Space Grotesk',sans-serif;font-size:25px;font-weight:700;margin-bottom:6px}
 .glogo b{color:var(--gold)}
-.gsub{color:var(--mut);font-size:14px;margin-bottom:22px}
-.passinput{width:100%;background:var(--card);border:1px solid var(--line2);color:var(--ink);border-radius:12px;padding:14px;font-size:17px;text-align:center;letter-spacing:.08em;margin-bottom:12px}
+.gsub{color:var(--dim);font-size:14px;margin-bottom:22px}
+.passinput{width:100%;background:var(--panel);border:1px solid var(--line2);color:var(--cream);border-radius:13px;padding:14px;font-size:17px;text-align:center;letter-spacing:.08em;margin-bottom:12px;font-family:'Inter'}
 .passinput:focus{outline:none;border-color:var(--gold)}
-.gatebtn{width:100%;background:var(--gold);color:#1a1500;border:none;border-radius:12px;padding:14px;font-size:16px;font-weight:800;cursor:pointer}
-.gatebtn:active{transform:scale(.98)}
-.gateerr{color:#f3a3a3;font-size:13px;margin-top:12px;min-height:18px}
+.gatebtn{width:100%;background:var(--gold);color:var(--ink);border:none;border-radius:13px;padding:14px;font-size:16px;font-weight:700;cursor:pointer;font-family:'Inter'}
+.gateerr{color:#e07a6b;font-size:13px;margin-top:12px;min-height:18px}
 </style>
 </head>
 <body>
-<div id="gate" class="gate" style="display:none">
+<div id="gate" class="gate">
   <div class="gatebox">
     <div class="glogo"><b>RUX</b> Takvim</div>
-    <div class="gsub">İçerik takvimini görmek için şifre gir</div>
-    <input id="passInput" class="passinput" type="password" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Şifre" />
+    <div class="gsub">İçerik takvimini açmak için şifre gir</div>
+    <input id="passInput" class="passinput" type="password" inputmode="text" autocomplete="off" autocapitalize="off" placeholder="Şifre">
     <button id="gateBtn" class="gatebtn">Gir</button>
     <div id="gateErr" class="gateerr"></div>
   </div>
 </div>
-<header>
-  <div class="brand">
-    <h1><b>RUX</b> Takvim</h1>
-    <div style="display:flex;align-items:center;gap:8px">
-      <div class="sync" id="sync">yükleniyor…</div>
-      <button class="refresh" id="refresh">↻</button>
-    </div>
-  </div>
-  <div class="nav">
-    <button id="prev">‹</button>
-    <div class="mlabel" id="mlabel">—<small id="mcount"></small></div>
-    <button id="next">›</button>
-  </div>
-</header>
 
-<div class="chips" id="chips">
-  <div class="chip on" data-f="all">Hepsi</div>
-  <div class="chip" data-f="Çekim">Çekim</div>
-  <div class="chip" data-f="Reels">Reels</div>
-  <div class="chip" data-f="Post">Post</div>
+<div class="app">
+  <div class="top">
+    <div class="brand"><b>RUX</b> Takvim</div>
+    <div class="sync"><span id="syncTxt">…</span><span class="r" id="refresh">↻</span></div>
+  </div>
+
+  <div class="hero">
+    <h2>Yaklaşan</h2>
+    <div class="sub">Önümüzdeki 2 hafta</div>
+    <div class="strip" id="strip1"></div>
+    <div class="strip r2" id="strip2"></div>
+  </div>
+
+  <div id="content"><div class="loading"><div class="spin"></div>Takvim yükleniyor…</div></div>
 </div>
 
-<div class="wrap" id="app">
-  <div class="loading"><div class="spin"></div>Bulut takvimi yükleniyor…</div>
+<button class="fab" id="fab">＋ Ekle</button>
+
+<div class="scrim" id="scrim"></div>
+
+<!-- ekle -->
+<div class="sheet" id="addSheet">
+  <h3>İçerik ekle</h3>
+  <div class="fld"><label>Başlık</label><input id="f_title" type="text" placeholder="ör. Kına Çekimi"></div>
+  <div class="srow">
+    <div class="fld"><label>Tarih</label><input id="f_date" type="date"></div>
+    <div class="fld"><label>Saat (opsiyonel)</label><input id="f_time" type="time"></div>
+  </div>
+  <div class="fld"><label>Kategori</label><div class="seg" id="f_kat">
+    <button data-v="Çekim">Çekim</button><button data-v="Reels" class="on">Reels</button><button data-v="Post">Post</button>
+  </div></div>
+  <div class="fld"><label>Atanan (opsiyonel)</label><div class="seg" id="f_who">
+    <button data-v="" class="on">—</button><button data-v="efe">Efe</button><button data-v="yasin">Yasin</button>
+  </div></div>
+  <button class="save" id="saveBtn">Kaydet</button>
+  <button class="cancel" data-close>Vazgeç</button>
 </div>
+
+<!-- detay/sil -->
+<div class="sheet" id="detSheet">
+  <h3 id="d_title">—</h3>
+  <div class="dl" id="d_meta"></div>
+  <button class="del" id="delBtn">Sil</button>
+  <button class="cancel" data-close>Kapat</button>
+</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
-const SB_URL = 'https://vigskbrwdosehqgldvay.supabase.co';
-let SB_KEY = null; // şifre ile çözülür
-const ENC = {salt:'laLGKw8GC7hjiQvTY1DZOw==', iv:'f5yh+3FbeyB7ag+e', cipher:'fVk/K56o5Dedcn3u2YlCokuH+DgvslrphjR6nZbcO6bxueQxDGoCu7ewQa3JYZ6vELgVCVNsd++Fvh24GRo='};
-const b64d = s => Uint8Array.from(atob(s), c=>c.charCodeAt(0));
+const SB_URL='https://vigskbrwdosehqgldvay.supabase.co';
+let SB_KEY=null;
+const ENC={salt:'laLGKw8GC7hjiQvTY1DZOw==',iv:'f5yh+3FbeyB7ag+e',cipher:'fVk/K56o5Dedcn3u2YlCokuH+DgvslrphjR6nZbcO6bxueQxDGoCu7ewQa3JYZ6vELgVCVNsd++Fvh24GRo='};
+const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function unlock(pass){
   const enc=new TextEncoder();
   const km=await crypto.subtle.importKey('raw',enc.encode(pass),'PBKDF2',false,['deriveKey']);
   const ak=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64d(ENC.salt),iterations:100000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
-  const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64d(ENC.iv)},ak,b64d(ENC.cipher));
-  return new TextDecoder().decode(plain); // yanlış şifrede hata fırlatır
+  return new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64d(ENC.iv)},ak,b64d(ENC.cipher)));
 }
-const AY = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
-const GUN = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
-const GUNK = ['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'];
-
-let ALL = [];          // tüm tarihli içerikler
-let filter = 'all';
-let cursor = new Date(); cursor.setDate(1);
-
-const $ = id => document.getElementById(id);
-
-function catClass(k){
-  if(k==='Reels') return 'b-reels'; if(k==='Çekim') return 'b-cekim';
-  if(k==='Post') return 'b-post'; return 'b-def';
-}
-function catColor(k){
-  if(k==='Reels') return 'var(--reels)'; if(k==='Çekim') return 'var(--cekim)';
-  if(k==='Post') return 'var(--post)'; return 'var(--def)';
-}
+const AY=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+const GUNK=['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'];
+const $=id=>document.getElementById(id);
+let ALL=[];
+const hdr=()=>({apikey:SB_KEY,'Authorization':'Bearer '+SB_KEY});
 function esc(s){return String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function catClass(k){return k==='Çekim'?'cekim':k==='Reels'?'reels':k==='Post'?'post':'def';}
+function catIcon(k){return k==='Çekim'?'◎':k==='Reels'?'▶':k==='Post'?'▦':'•';}
 
 async function load(){
   try{
-    const r = await fetch(`${SB_URL}/rest/v1/content?select=id,data,deleted`, {headers:{apikey:SB_KEY}});
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const rows = await r.json();
-    const items = rows.filter(x=>!x.deleted).map(x=>x.data).filter(x=>x && !x.isTemplate && x.date);
-    ALL = items;
-    localStorage.setItem('rux_cache', JSON.stringify({t:Date.now(), items}));
-    setSync(Date.now(), false);
-    // ilk açılışta dolu aya atla
-    if(!hasItems(cursor) && ALL.length){ jumpToNearest(); }
-    render();
+    const r=await fetch(`${SB_URL}/rest/v1/content?select=id,data,deleted`,{headers:hdr()});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const rows=await r.json();
+    ALL=rows.filter(x=>!x.deleted).map(x=>x.data).filter(x=>x&&!x.isTemplate);
+    localStorage.setItem('rux_cache',JSON.stringify({t:Date.now(),items:ALL}));
+    setSync(Date.now(),false); render();
   }catch(e){
-    const cache = JSON.parse(localStorage.getItem('rux_cache')||'null');
-    if(cache && cache.items){ ALL = cache.items; setSync(cache.t, true); if(!hasItems(cursor)&&ALL.length)jumpToNearest(); render(); }
-    else { $('app').innerHTML = `<div class="err">Bağlantı kurulamadı (${esc(e.message)}). İnternetini kontrol edip ↻ ile tekrar dene.</div>`; $('sync').textContent='bağlantı yok'; }
+    const c=JSON.parse(localStorage.getItem('rux_cache')||'null');
+    if(c&&c.items){ALL=c.items;setSync(c.t,true);render();}
+    else $('content').innerHTML=`<div class="empty">Bağlanılamadı. ↻ ile tekrar dene.</div>`;
   }
 }
-
-function setSync(t, cached){
-  const d = new Date(t);
-  const hh = String(d.getHours()).padStart(2,'0'), mm = String(d.getMinutes()).padStart(2,'0');
-  $('sync').innerHTML = (cached?'📴 önbellek<br>':'☁ güncel<br>') + `${hh}:${mm}`;
-}
-function ym(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');}
-function hasItems(d){const k=ym(d);return ALL.some(x=>x.date.slice(0,7)===k && passFilter(x));}
-function jumpToNearest(){
-  const months=[...new Set(ALL.map(x=>x.date.slice(0,7)))].sort();
-  const now=ym(new Date());
-  const pick = months.find(m=>m>=now) || months[months.length-1];
-  if(pick){ cursor=new Date(pick+'-01T00:00:00'); }
-}
-function passFilter(x){
-  if(filter==='all') return true;
-  return x.kategori===filter;
-}
+function setSync(t,cached){const d=new Date(t);$('syncTxt').textContent=(cached?'📴 ':'☁ ')+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
 
 function render(){
-  const k = ym(cursor);
-  $('mlabel').firstChild.textContent = AY[cursor.getMonth()]+' '+cursor.getFullYear();
-  let list = ALL.filter(x=>x.date.slice(0,7)===k && passFilter(x));
-  list.sort((a,b)=> (a.date===b.date ? (a.time||'99:99').localeCompare(b.time||'99:99') : a.date.localeCompare(b.date)));
-  $('mcount').textContent = list.length ? list.length+' içerik' : '';
-
-  if(!list.length){
-    $('app').innerHTML = `<div class="empty"><div class="big">🗓️</div>Bu ayda${filter!=='all'?' (filtreyle)':''} içerik yok.<br>Ok tuşlarıyla başka aya geç.</div>`;
-    return;
+  // hero şerit: bugünden 14 gün
+  const today=new Date();today.setHours(0,0,0,0);
+  const has=new Set(ALL.filter(x=>x.date).map(x=>x.date));
+  let s1='',s2='';
+  for(let i=0;i<14;i++){
+    const d=new Date(today);d.setDate(today.getDate()+i);const k=ymd(d);
+    const cls=['day',i===0?'today':'',has.has(k)?'has':''].filter(Boolean).join(' ');
+    const cell=`<div class="${cls}"><small>${GUNK[d.getDay()]}</small>${d.getDate()}</div>`;
+    if(i<7)s1+=cell;else s2+=cell;
   }
-  const today = new Date(); const todayStr = today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
-  $('app').innerHTML = buildGroups(list, todayStr);
-}
+  $('strip1').innerHTML=s1;$('strip2').innerHTML=s2;
 
-function buildGroups(list, todayStr){
-  const groups={};
-  for(const x of list){ (groups[x.date]=groups[x.date]||[]).push(x); }
-  let html='';
-  for(const date of Object.keys(groups).sort()){
-    const d=new Date(date+'T00:00:00');
-    const isToday=date===todayStr;
-    html += `<div class="daygroup"><div class="dayhd"><span class="dnum">${d.getDate()}</span><span class="dwd">${GUN[d.getDay()]}</span>${isToday?'<span class="today">Bugün</span>':''}</div>`;
-    for(const x of groups[date]) html += card(x);
-    html += `</div>`;
+  // ajanda: tarihli, bugünden itibaren, artan
+  const todayStr=ymd(today);
+  const items=ALL.filter(x=>x.date&&x.date>=todayStr).sort((a,b)=>a.date===b.date?(a.time||'99').localeCompare(b.time||'99'):a.date.localeCompare(b.date));
+  if(!items.length){$('content').innerHTML=`<div class="empty">Yaklaşan içerik yok.<br>＋ Ekle ile başla.</div>`;return;}
+  let html='',curM='',curD='';
+  for(const x of items){
+    const d=new Date(x.date+'T00:00:00');const mk=AY[d.getMonth()]+' '+d.getFullYear();
+    if(mk!==curM){curM=mk;html+=`<div class="mdiv">${mk}</div><div class="list">`;}
+    html+=row(x,d);
   }
-  html += `<div class="count">Toplam ${list.length} içerik · ☁ canlı buluttan</div>`;
-  return html;
+  html+='</div>';
+  $('content').innerHTML=html;
+  document.querySelectorAll('.row').forEach(el=>el.onclick=()=>openDetail(el.dataset.id));
 }
-
-function card(x){
-  const appr = x.approval==='onaylandi';
-  const tags = (x.tags||[]).filter(Boolean);
-  const note = x.notes || x.caption || '';
-  const noteShort = note.length>120 ? note.slice(0,120)+'…' : note;
-  return `<div class="card" style="border-left-color:${catColor(x.kategori)}">
-    <div class="top">
-      ${x.time?`<span class="time">${esc(x.time)}</span>`:''}
-      <span class="badge ${catClass(x.kategori)}">${esc(x.kategori||'—')}</span>
-      ${appr?'<span class="badge b-ok">✓ Onaylı</span>':'<span class="badge b-taslak">Taslak</span>'}
-      ${x.assignee==='yasin'?'<span class="who who-yasin">Yasin</span>':x.assignee==='efe'?'<span class="who who-efe">Efe</span>':''}
-    </div>
-    <div class="title">${esc(x.title||'(başlıksız)')}</div>
-    ${noteShort?`<div class="meta">${esc(noteShort)}</div>`:''}
-    ${tags.length?`<div class="tags">${tags.map(t=>`<span class="tag">#${esc(t)}</span>`).join('')}</div>`:''}
+function row(x,d){
+  const appr=x.approval==='onaylandi';
+  const sub=[x.time,x.kategori,x.assignee==='yasin'?'Yasin':x.assignee==='efe'?'Efe':''].filter(Boolean).join(' · ');
+  return `<div class="row" data-id="${esc(x.id)}">
+    <div class="date"><div class="m">${AY[d.getMonth()].slice(0,3)}</div><div class="d">${String(d.getDate()).padStart(2,'0')}</div></div>
+    <div class="ico ${catClass(x.kategori)}">${catIcon(x.kategori)}</div>
+    <div class="body"><div class="t">${esc(x.title||'(başlıksız)')}</div><div class="s">${esc(sub||'—')}</div></div>
+    <div class="chip ${appr?'ok':'lock'}">${appr?'✓':'🔒'}</div>
   </div>`;
 }
 
-// olaylar
-$('prev').onclick=()=>{cursor.setMonth(cursor.getMonth()-1);render();};
-$('next').onclick=()=>{cursor.setMonth(cursor.getMonth()+1);render();};
-$('refresh').onclick=()=>{$('sync').textContent='…';load();};
-$('chips').addEventListener('click',e=>{
-  const c=e.target.closest('.chip'); if(!c)return;
-  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
-  c.classList.add('on'); filter=c.dataset.f;
-  if(!hasItems(cursor)&&ALL.length)jumpToNearest();
-  render();
-});
-// uygulamaya geri dönünce tazele
-document.addEventListener('visibilitychange',()=>{ if(!document.hidden) load(); });
-// açıkken her 25 sn'de otomatik tazele (yakın-anlık) — Yasin dokunmadan güncellenir
-setInterval(()=>{ if(!document.hidden && SB_KEY) load(); }, 25000);
+/* ---- sheet kontrol ---- */
+function openSheet(id){$('scrim').classList.add('on');$(id).classList.add('on');}
+function closeSheets(){$('scrim').classList.remove('on');$('addSheet').classList.remove('on');$('detSheet').classList.remove('on');delBtn.classList.remove('confirm');delBtn.textContent='Sil';}
+$('scrim').onclick=closeSheets;
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeSheets);
+function seg(box){box.querySelectorAll('button').forEach(b=>b.onclick=()=>{box.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');});}
+seg($('f_kat'));seg($('f_who'));
+function segVal(box){const b=box.querySelector('button.on');return b?b.dataset.v:'';}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200);}
 
-// şifre çözülünce çalışır: önce önbellekten anında göster, sonra canlı çek
+/* ---- ekle ---- */
+$('fab').onclick=()=>{$('f_title').value='';$('f_time').value='';$('f_date').value=ymd(new Date());openSheet('addSheet');setTimeout(()=>$('f_title').focus(),250);};
+$('saveBtn').onclick=async()=>{
+  const title=$('f_title').value.trim();const date=$('f_date').value;
+  if(!title){toast('Başlık gerekli');return;}
+  if(!date){toast('Tarih gerekli');return;}
+  const now=new Date().toISOString();
+  const id='p'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+  const item={id,date,time:$('f_time').value||null,title,script:'',notes:'',caption:'',
+    status:'fikir',approval:'taslak',assignee:segVal($('f_who'))||null,tags:[],comments:[],coverAbs:null,
+    kategori:segVal($('f_kat'))||'Reels',platform:['Instagram'],checklist:{etiket:false,gorsel:false,caption:false},
+    updatedAt:now,isTemplate:false,scriptFile:null,scriptName:null,publishedAt:null,sourceIdeaId:null,sourceClientId:null};
+  $('saveBtn').disabled=true;$('saveBtn').textContent='Kaydediliyor…';
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/content?on_conflict=id`,{method:'POST',
+      headers:{...hdr(),'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'},
+      body:JSON.stringify({id,data:item,updated_at:now,deleted:false})});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    ALL.push(item);closeSheets();render();toast('Eklendi ✓');load();
+  }catch(e){toast('Hata: '+e.message);}
+  $('saveBtn').disabled=false;$('saveBtn').textContent='Kaydet';
+};
+
+/* ---- detay + sil ---- */
+let curId=null;
+function openDetail(id){
+  const x=ALL.find(i=>i.id===id);if(!x)return;curId=id;
+  $('d_title').textContent=x.title||'(başlıksız)';
+  const d=new Date(x.date+'T00:00:00');
+  const meta=[`<b>${d.getDate()} ${AY[d.getMonth()]} ${d.getFullYear()}</b>${x.time?' · '+x.time:''}`,
+    'Kategori: <b>'+esc(x.kategori||'—')+'</b>',
+    'Durum: <b>'+(x.approval==='onaylandi'?'Onaylı':'Taslak')+'</b>',
+    x.assignee?'Atanan: <b>'+(x.assignee==='yasin'?'Yasin':'Efe')+'</b>':''].filter(Boolean);
+  $('d_meta').innerHTML=meta.map(m=>`<div class="dl">${m}</div>`).join('');
+  openSheet('detSheet');
+}
+const delBtn=$('delBtn');
+delBtn.onclick=async()=>{
+  if(!delBtn.classList.contains('confirm')){delBtn.classList.add('confirm');delBtn.textContent='Emin misin? Tekrar bas';return;}
+  const now=new Date().toISOString();
+  delBtn.disabled=true;delBtn.textContent='Siliniyor…';
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/content?id=eq.${encodeURIComponent(curId)}`,{method:'PATCH',
+      headers:{...hdr(),'Content-Type':'application/json','Prefer':'return=minimal'},
+      body:JSON.stringify({deleted:true,updated_at:now})});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    ALL=ALL.filter(i=>i.id!==curId);closeSheets();render();toast('Silindi');load();
+  }catch(e){toast('Hata: '+e.message);}
+  delBtn.disabled=false;delBtn.classList.remove('confirm');delBtn.textContent='Sil';
+};
+
+/* ---- refresh ---- */
+$('refresh').onclick=()=>{$('syncTxt').textContent='…';load();};
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&SB_KEY)load();});
+setInterval(()=>{if(!document.hidden&&SB_KEY)load();},25000);
+
+/* ---- gate ---- */
 function startApp(){
-  const cache = JSON.parse(localStorage.getItem('rux_cache')||'null');
-  if(cache && cache.items){ ALL=cache.items.filter(x=>x&&x.date&&!x.isTemplate); setSync(cache.t,true); if(!hasItems(cursor)&&ALL.length)jumpToNearest(); render(); }
+  const c=JSON.parse(localStorage.getItem('rux_cache')||'null');
+  if(c&&c.items){ALL=c.items.filter(x=>x&&!x.isTemplate);setSync(c.t,true);render();}
   load();
 }
-async function tryUnlock(pass, fromSaved){
-  try{
-    SB_KEY = await unlock(pass);
-    localStorage.setItem('rux_pass', pass);
-    $('gate').style.display='none';
-    startApp();
-  }catch(e){
-    if(fromSaved){ localStorage.removeItem('rux_pass'); $('gate').style.display='flex'; }
-    else { $('gateErr').textContent='Şifre yanlış, tekrar dene.'; $('passInput').value=''; $('passInput').focus(); }
-  }
+async function tryUnlock(pass,saved){
+  try{SB_KEY=await unlock(pass);localStorage.setItem('rux_pass',pass);$('gate').style.display='none';startApp();}
+  catch(e){if(saved){localStorage.removeItem('rux_pass');$('gate').style.display='flex';}else{$('gateErr').textContent='Şifre yanlış, tekrar dene.';$('passInput').value='';$('passInput').focus();}}
 }
-$('gateBtn').onclick=()=>{ const v=$('passInput').value.trim(); if(v){ $('gateErr').textContent=''; tryUnlock(v,false); } };
-$('passInput').addEventListener('keydown',e=>{ if(e.key==='Enter') $('gateBtn').click(); });
-(function boot(){
-  const saved=localStorage.getItem('rux_pass');
-  if(saved){ tryUnlock(saved,true); } else { $('gate').style.display='flex'; $('passInput').focus(); }
-})();
+$('gateBtn').onclick=()=>{const v=$('passInput').value.trim();if(v){$('gateErr').textContent='';tryUnlock(v,false);}};
+$('passInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('gateBtn').click();});
+(function(){const s=localStorage.getItem('rux_pass');if(s)tryUnlock(s,true);else{$('gate').style.display='flex';$('passInput').focus();}})();
 </script>
 </body>
 </html>

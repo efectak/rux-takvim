@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#08080b">
+<title>RUX Takvim — Tema Yönleri</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#08080b;color:#e8e8ee;font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  padding:28px 16px 60px;min-height:100vh}
+.head{max-width:980px;margin:0 auto 26px;text-align:center}
+.head h1{font-size:22px;font-weight:700;letter-spacing:.01em}
+.head h1 b{color:#e8c87a}
+.head p{color:#8b8b97;font-size:14px;margin-top:8px;line-height:1.6}
+.grid{max-width:980px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px 24px}
+.panel{display:flex;flex-direction:column;align-items:center}
+.plabel{width:100%;max-width:300px;margin-bottom:14px}
+.pname{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+.dots{display:inline-flex;gap:4px;margin-left:auto}
+.dot{width:11px;height:11px;border-radius:50%;border:1px solid rgba(255,255,255,.15)}
+.pvibe{font-size:12.5px;color:#8b8b97;margin-top:4px;line-height:1.5}
+
+/* ---- phone frame ---- */
+.phone{width:300px;height:600px;border-radius:46px;padding:11px;background:#000;
+  box-shadow:0 0 0 2px #1c1c22, 0 30px 60px rgba(0,0,0,.55);position:relative}
+.notch{position:absolute;top:20px;left:50%;transform:translateX(-50%);width:92px;height:26px;background:#000;border-radius:16px;z-index:30}
+.screen{width:100%;height:100%;border-radius:36px;overflow:hidden;position:relative}
+.sbar{position:relative;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:14px 22px 4px;font-size:12px;font-weight:600}
+.sbar .ic{display:flex;gap:5px;align-items:center;font-size:11px;opacity:.9}
+.scr-body{position:relative;z-index:10;padding:6px 16px 16px;height:calc(100% - 40px);overflow:hidden}
+.hd{display:flex;align-items:flex-end;justify-content:space-between;margin:10px 2px 16px}
+.logo{font-size:21px;font-weight:800;letter-spacing:.01em}
+.month{font-size:12px;font-weight:600}
+.card{border-radius:15px;padding:12px 13px;margin-bottom:11px;position:relative}
+.crow{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.cdate{font-size:13px;font-weight:800;letter-spacing:.04em}
+.ctime{font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px}
+.cpill{font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:999px;margin-left:auto}
+.ctitle{font-size:14.5px;font-weight:700;line-height:1.25}
+.ok{font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px}
+
+/* ============ 1) OBSIDIAN & ALTIN ============ */
+.t-gold .screen{background:radial-gradient(120% 80% at 50% -10%,#171206 0%,#0a0807 45%,#060507 100%)}
+.t-gold,.t-gold .sbar{color:#efe6cf}
+.t-gold .logo{font-family:Georgia,"Times New Roman",serif;
+  background:linear-gradient(100deg,#9a7b2e 0%,#f4dd9b 30%,#fff6da 45%,#f4dd9b 60%,#9a7b2e 100%);
+  background-size:250% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:shimmer 4.5s linear infinite}
+@keyframes shimmer{to{background-position:-250% 0}}
+.t-gold .logo b{font-weight:800}
+.t-gold .month{color:#c9a85f;text-transform:uppercase;letter-spacing:.16em;font-size:10px}
+.t-gold .card{background:rgba(255,255,255,.035);border:1px solid rgba(232,200,122,.20);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.t-gold .cdate{font-family:Georgia,serif;color:#e8c87a;font-size:15px}
+.t-gold .ctime{background:rgba(232,200,122,.12);color:#e8c87a;border:1px solid rgba(232,200,122,.2)}
+.t-gold .cpill{background:rgba(232,200,122,.10);color:#dcbf85;border:1px solid rgba(232,200,122,.22)}
+.t-gold .ctitle{color:#f3ecda}
+.t-gold .ok{background:rgba(120,180,120,.14);color:#9fd6a0}
+.t-gold .hd{border-bottom:1px solid rgba(232,200,122,.16);padding-bottom:10px}
+
+/* ============ 2) AURORA CAM ============ */
+.t-aurora .screen{background:#0a0e1a;isolation:isolate}
+.t-aurora .blob{position:absolute;border-radius:50%;filter:blur(46px);opacity:.7;z-index:0}
+.t-aurora .b1{width:220px;height:220px;background:#7c3aed;top:-40px;left:-50px;animation:drift1 9s ease-in-out infinite alternate}
+.t-aurora .b2{width:200px;height:200px;background:#22d3ee;top:120px;right:-60px;animation:drift2 11s ease-in-out infinite alternate}
+.t-aurora .b3{width:180px;height:180px;background:#ec4899;bottom:-30px;left:30px;animation:drift1 13s ease-in-out infinite alternate-reverse}
+@keyframes drift1{to{transform:translate(26px,30px) scale(1.12)}}
+@keyframes drift2{to{transform:translate(-30px,24px) scale(1.08)}}
+.t-aurora,.t-aurora .sbar{color:#f2f4fb}
+.t-aurora .logo{color:#fff;text-shadow:0 0 18px rgba(124,58,237,.5)}
+.t-aurora .month{color:#aeb8d8}
+.t-aurora .card{background:rgba(255,255,255,.07);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.14);box-shadow:0 8px 24px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.18)}
+.t-aurora .cdate{color:#fff}
+.t-aurora .ctime{background:rgba(255,255,255,.14);color:#eef}
+.t-aurora .cpill{background:rgba(124,58,237,.4);color:#e7ddff;border:1px solid rgba(255,255,255,.18)}
+.t-aurora .ctitle{color:#fff}
+.t-aurora .ok{background:rgba(52,211,153,.28);color:#d1fae5}
+
+/* ============ 3) İRİDESAN (holografik) ============ */
+.t-irid .screen{background:#08070a}
+.t-irid,.t-irid .sbar{color:#ece8f2}
+.t-irid .logo{background:linear-gradient(100deg,#7af2d2,#9ad1ff,#d8a8ff,#ff9ec7,#7af2d2);
+  background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:iridmove 6s linear infinite}
+@keyframes iridmove{to{background-position:200% 0}}
+.t-irid .month{color:#9a93ad;text-transform:uppercase;letter-spacing:.12em;font-size:10px}
+.t-irid .card{background:#100e15;border:1px solid transparent;
+  background-image:linear-gradient(#100e15,#0c0b11),linear-gradient(120deg,#7af2d2,#9ad1ff,#d8a8ff,#ff9ec7);
+  background-origin:border-box;background-clip:padding-box,border-box;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.t-irid .cdate{background:linear-gradient(120deg,#7af2d2,#9ad1ff,#d8a8ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-size:15px}
+.t-irid .ctime{background:rgba(154,209,255,.12);color:#bcd9ff}
+.t-irid .cpill{background:rgba(216,168,255,.14);color:#e6cdff;border:1px solid rgba(216,168,255,.3)}
+.t-irid .ctitle{color:#efe9f6}
+.t-irid .ok{background:rgba(122,242,210,.14);color:#9af2d6}
+
+/* ============ 4) NEON HUD (cyber) ============ */
+.t-neon .screen{background:#000;
+  background-image:linear-gradient(rgba(34,227,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(34,227,255,.05) 1px,transparent 1px);
+  background-size:26px 26px}
+.t-neon,.t-neon .sbar{color:#cdeff5}
+.t-neon .logo{color:#22e3ff;text-shadow:0 0 12px rgba(34,227,255,.7),0 0 26px rgba(34,227,255,.35);font-weight:800}
+.t-neon .month{color:#ff3df0;text-shadow:0 0 10px rgba(255,61,240,.6);text-transform:uppercase;letter-spacing:.14em;font-size:10px;font-family:ui-monospace,monospace}
+.t-neon .card{background:rgba(8,16,20,.7);border:1px solid rgba(34,227,255,.3);
+  box-shadow:0 0 16px rgba(34,227,255,.08),inset 0 0 18px rgba(34,227,255,.04)}
+.t-neon .card::before,.t-neon .card::after{content:"";position:absolute;width:9px;height:9px;border-color:#22e3ff;border-style:solid;opacity:.8}
+.t-neon .card::before{top:-1px;left:-1px;border-width:1px 0 0 1px}
+.t-neon .card::after{bottom:-1px;right:-1px;border-width:0 1px 1px 0}
+.t-neon .cdate{color:#22e3ff;font-family:ui-monospace,monospace;text-shadow:0 0 10px rgba(34,227,255,.6);font-size:15px}
+.t-neon .ctime{background:rgba(34,227,255,.1);color:#7ff0ff;border:1px solid rgba(34,227,255,.3);font-family:ui-monospace,monospace}
+.t-neon .cpill{background:rgba(255,61,240,.12);color:#ff9af4;border:1px solid rgba(255,61,240,.4);text-shadow:0 0 8px rgba(255,61,240,.5)}
+.t-neon .ctitle{color:#dff6fb}
+.t-neon .ok{background:rgba(57,255,170,.12);color:#7fffc4;border:1px solid rgba(57,255,170,.35)}
+.t-neon .scr-body::after{content:"";position:absolute;left:0;right:0;top:0;height:60px;
+  background:linear-gradient(rgba(34,227,255,.10),transparent);animation:scan 4s linear infinite;pointer-events:none;z-index:1}
+@keyframes scan{0%{transform:translateY(-60px)}100%{transform:translateY(560px)}}
+
+.foot{max-width:980px;margin:34px auto 0;text-align:center;color:#8b8b97;font-size:13px;line-height:1.7}
+.foot b{color:#e8c87a}
+</style>
+</head>
+<body>
+<div class="head">
+  <h1><b>RUX</b> Takvim — Tema Yönleri</h1>
+  <p>4 premium / fütüristik yön. Telefonda nasıl duracağını birebir göstermek için gerçek çerçevede. Beğendiğini söyle, ana takvime uygularım — ya da ikisini karıştıralım.</p>
+</div>
+
+<div class="grid">
+
+  <!-- 1 -->
+  <div class="panel">
+    <div class="plabel">
+      <div class="pname">1 · Obsidyen &amp; Altın <span class="dots"><span class="dot" style="background:#060507"></span><span class="dot" style="background:#e8c87a"></span><span class="dot" style="background:#1a1812"></span></span></div>
+      <div class="pvibe">Kuyumcu lüksü: obsidyen siyah, şampanya altını, ince çizgiler, serif logo (altın parıltı animasyonlu).</div>
+    </div>
+    <div class="phone t-gold"><div class="notch"></div><div class="screen">
+      <div class="sbar"><span>9:41</span><span class="ic">5G &nbsp;100%</span></div>
+      <div class="scr-body">
+        <div class="hd"><div class="logo">RUX <b>Takvim</b></div><div class="month">Temmuz 2026</div></div>
+        <div class="card"><div class="crow"><span class="cdate">02 SAL</span><span class="ctime">15:00</span><span class="cpill">Çekim</span></div><div class="ctitle">Kına Çekimi</div></div>
+        <div class="card"><div class="crow"><span class="cdate">05 CUM</span><span class="ok">✓ Onaylı</span><span class="cpill">Reels</span></div><div class="ctitle">Reels Senaryosu</div></div>
+        <div class="card"><div class="crow"><span class="cdate">21 SAL</span><span class="ctime">14:00</span><span class="cpill">Reels</span></div><div class="ctitle">Düğün Hikayesi</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 2 -->
+  <div class="panel">
+    <div class="plabel">
+      <div class="pname">2 · Aurora Cam <span class="dots"><span class="dot" style="background:#7c3aed"></span><span class="dot" style="background:#22d3ee"></span><span class="dot" style="background:#ec4899"></span></span></div>
+      <div class="pvibe">Fütüristik buzlu cam (glassmorphism), arkada süzülen aurora ışıkları. Apple Vision havası, ferah ve modern.</div>
+    </div>
+    <div class="phone t-aurora"><div class="notch"></div><div class="screen">
+      <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+      <div class="sbar"><span>9:41</span><span class="ic">5G &nbsp;100%</span></div>
+      <div class="scr-body">
+        <div class="hd"><div class="logo">RUX Takvim</div><div class="month">Temmuz 2026</div></div>
+        <div class="card"><div class="crow"><span class="cdate">02 SAL</span><span class="ctime">15:00</span><span class="cpill">Çekim</span></div><div class="ctitle">Kına Çekimi</div></div>
+        <div class="card"><div class="crow"><span class="cdate">05 CUM</span><span class="ok">✓ Onaylı</span><span class="cpill">Reels</span></div><div class="ctitle">Reels Senaryosu</div></div>
+        <div class="card"><div class="crow"><span class="cdate">21 SAL</span><span class="ctime">14:00</span><span class="cpill">Reels</span></div><div class="ctitle">Düğün Hikayesi</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 3 -->
+  <div class="panel">
+    <div class="plabel">
+      <div class="pname">3 · İridesan <span class="dots"><span class="dot" style="background:#7af2d2"></span><span class="dot" style="background:#9ad1ff"></span><span class="dot" style="background:#d8a8ff"></span></span></div>
+      <div class="pvibe">Holografik / sedef parıltı: koyu zemin, gökkuşağı kenarlı kartlar, renk akışı animasyonu. Lüks ve gelecekçi.</div>
+    </div>
+    <div class="phone t-irid"><div class="notch"></div><div class="screen">
+      <div class="sbar"><span>9:41</span><span class="ic">5G &nbsp;100%</span></div>
+      <div class="scr-body">
+        <div class="hd"><div class="logo">RUX Takvim</div><div class="month">Temmuz 2026</div></div>
+        <div class="card"><div class="crow"><span class="cdate">02 SAL</span><span class="ctime">15:00</span><span class="cpill">Çekim</span></div><div class="ctitle">Kına Çekimi</div></div>
+        <div class="card"><div class="crow"><span class="cdate">05 CUM</span><span class="ok">✓ Onaylı</span><span class="cpill">Reels</span></div><div class="ctitle">Reels Senaryosu</div></div>
+        <div class="card"><div class="crow"><span class="cdate">21 SAL</span><span class="ctime">14:00</span><span class="cpill">Reels</span></div><div class="ctitle">Düğün Hikayesi</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 4 -->
+  <div class="panel">
+    <div class="plabel">
+      <div class="pname">4 · Neon HUD <span class="dots"><span class="dot" style="background:#22e3ff"></span><span class="dot" style="background:#ff3df0"></span><span class="dot" style="background:#000"></span></span></div>
+      <div class="pvibe">Yüksek teknoloji / cyber: saf siyah, neon cyan-magenta parıltı, ızgara, köşe HUD braketleri, tarama efekti.</div>
+    </div>
+    <div class="phone t-neon"><div class="notch"></div><div class="screen">
+      <div class="sbar"><span>9:41</span><span class="ic">5G &nbsp;100%</span></div>
+      <div class="scr-body">
+        <div class="hd"><div class="logo">RUX Takvim</div><div class="month">Temmuz 2026</div></div>
+        <div class="card"><div class="crow"><span class="cdate">02 SAL</span><span class="ctime">15:00</span><span class="cpill">Çekim</span></div><div class="ctitle">Kına Çekimi</div></div>
+        <div class="card"><div class="crow"><span class="cdate">05 CUM</span><span class="ok">✓ ONAYLI</span><span class="cpill">Reels</span></div><div class="ctitle">Reels Senaryosu</div></div>
+        <div class="card"><div class="crow"><span class="cdate">21 SAL</span><span class="ctime">14:00</span><span class="cpill">Reels</span></div><div class="ctitle">Düğün Hikayesi</div></div>
+      </div>
+    </div></div>
+  </div>
+
+</div>
+
+<div class="foot">
+  Hangisini sevdin? Numarasını ya da adını söyle — <b>ana takvime uygularım.</b><br>
+  İstersen "2'nin camı + 1'in altını" gibi karıştırabiliriz de.
+</div>
+</body>
+</html>

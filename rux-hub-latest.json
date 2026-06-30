@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
-  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.2.0",
-  "notes": "Çekim Defteri + sade içerik editörü + çekim hatırlatmaları ve birçok iyileştirme."
+  "version": "0.2.1",
+  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.2.1",
+  "notes": "Otomatik bulut bağlantısı + her makineden ID/şifre giriş + ana sayfa katalog senkronu + Robotik & Kodlama paneli (Efe Selim) + ikon düzeltmesi."
 }

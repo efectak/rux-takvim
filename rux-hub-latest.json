@@ -1,5 +1,5 @@
 {
-  "version": "0.2.3",
-  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.2.3",
-  "notes": "Ekip giriş imzaları (Mert/Şevval/Efe Selim) + Robotik katalog 599 modül + AI Mentor (Senior/Sokratik/Hata Avı) + Öğren (skill tree · projeler · temeller · pinout) + açılış takılma düzeltmesi."
+  "version": "0.2.4",
+  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.2.4",
+  "notes": "Komponent kataloğu 599 → 2913 modül, 35 kategori (direnç, kondansatör, entegre, yarı iletken, motor, konnektör, pil/akü/solar, mekanik dahil gerçek komponent mağazası) + Robotik panelinde modüle tıklayınca detay ekranının açılmama hatası düzeltildi."
 }

@@ -1,5 +1,5 @@
 {
-  "version": "0.2.6",
-  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.2.6",
-  "notes": "Yeni menü: sol liste kalktı → altta süzülen hap-dock + ince üst şerit (içerik tam ekran). Yeni Eklentiler sekmesi: Premiere & After Effects panellerini tek tıkla kur. Yeniden tasarlanan Müşteri Haritası: Ordu → Fatsa sokakları → müşteri sinir ağına dalış. Apple (SF Pro) fontları + güvenlik düzeltmeleri."
+  "version": "0.2.7",
+  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.2.7",
+  "notes": "Düzeltme: Düğün albümündeki İnce Ayar paneli alt menüyle çakışması giderildi (Mac). Albüm: otomatik kurulumda 4 fotoğraf yan yana dizilir + siyah-beyaz fotoğraflar otomatik tespit edilip ayrı sayfalara alınır."
 }

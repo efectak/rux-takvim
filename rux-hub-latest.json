@@ -1,5 +1,5 @@
 {
-  "version": "0.2.4",
-  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.2.4",
-  "notes": "Komponent kataloğu 599 → 2913 modül, 35 kategori (direnç, kondansatör, entegre, yarı iletken, motor, konnektör, pil/akü/solar, mekanik dahil gerçek komponent mağazası) + Robotik panelinde modüle tıklayınca detay ekranının açılmama hatası düzeltildi."
+  "version": "0.2.6",
+  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.2.6",
+  "notes": "Yeni menü: sol liste kalktı → altta süzülen hap-dock + ince üst şerit (içerik tam ekran). Yeni Eklentiler sekmesi: Premiere & After Effects panellerini tek tıkla kur. Yeniden tasarlanan Müşteri Haritası: Ordu → Fatsa sokakları → müşteri sinir ağına dalış. Apple (SF Pro) fontları + güvenlik düzeltmeleri."
 }

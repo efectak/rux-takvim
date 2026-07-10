@@ -1,0 +1,48 @@
+name: RUX Hub paketle (bedava)
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Release etiketi (orn. hub-v0.2.5)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            script: dist:mac
+          - os: windows-latest
+            script: dist:win
+    steps:
+      - name: Private kaynagi cek (PAT)
+        uses: actions/checkout@v4
+        with:
+          repository: efectak/RUX-Hub
+          token: ${{ secrets.RUXHUB_PAT }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install
+      - name: Paketle (ad-hoc imza)
+        run: npm run ${{ matrix.script }} -- --publish never
+      - name: SHA256 saglama
+        run: node tools/checksums.cjs
+        continue-on-error: true
+      - name: Release'e yukle
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.release_tag }}
+          name: RUX Hub ${{ github.event.inputs.release_tag }}
+          files: |
+            dist/*.dmg
+            dist/*.zip
+            dist/*.exe
+            dist/SHA256SUMS.txt

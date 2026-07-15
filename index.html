@@ -142,12 +142,6 @@ body{background:var(--wall);font-family:'Inter',system-ui,sans-serif;color:var(-
 .dtext{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px;
   font-size:13.5px;line-height:1.6;color:var(--cream);white-space:pre-wrap;word-break:break-word;
   max-height:38vh;overflow:auto;-webkit-user-select:text;user-select:text}
-.dtags{display:flex;flex-wrap:wrap;gap:6px}
-.dtag{background:rgba(212,175,98,.10);border:1px solid var(--line2);color:var(--gold);border-radius:8px;padding:3px 9px;font-size:11.5px}
-.dck{display:flex;gap:7px}
-.dck span{flex:1;text-align:center;background:var(--panel2);border:1px solid var(--line);border-radius:9px;
-  padding:7px 4px;font-size:11.5px;color:var(--dim)}
-.dck span.on{background:rgba(110,190,130,.12);border-color:rgba(110,190,130,.3);color:var(--ok)}
 .del{width:100%;background:rgba(224,122,107,.12);color:var(--danger);border:1px solid rgba(224,122,107,.35);
   border-radius:13px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;margin-top:14px}
 .del.confirm{background:var(--danger);color:#1a0d0a;border-color:var(--danger)}
@@ -474,15 +468,7 @@ function openDetail(id){
   $('d_meta').innerHTML=meta.map(m=>`<div class="dl">${m}</div>`).join('');
 
   let h=dsec('Caption',x.caption,'cap')+dsec('Senaryo notu',x.script,'scr')+dsec('Notlar',x.notes,'not');
-  const tags=Array.isArray(x.tags)?x.tags.filter(Boolean):[];
-  if(tags.length)h+=`<div class="dsec"><div class="dsec-h"><span class="dsec-t">Etiketler</span></div>`+
-    `<div class="dtags">${tags.map(t=>`<span class="dtag">${esc(t)}</span>`).join('')}</div></div>`;
-  const ck=x.checklist||{};
-  h+=`<div class="dsec"><div class="dsec-h"><span class="dsec-t">Hazırlık</span></div><div class="dck">`+
-    `<span class="${ck.caption?'on':''}">${ck.caption?'✓':'○'} Caption</span>`+
-    `<span class="${ck.gorsel?'on':''}">${ck.gorsel?'✓':'○'} Görsel</span>`+
-    `<span class="${ck.etiket?'on':''}">${ck.etiket?'✓':'○'} Etiket</span></div></div>`;
-  if(!x.caption&&!x.script&&!x.notes)h+=`<div class="dl" style="margin-top:12px">Bu içerikte henüz caption/senaryo/not yok — RUX Hub'dan ekleyince burada görünür.</div>`;
+  if(!h)h=`<div class="dl" style="margin-top:12px">Bu içerikte henüz caption/senaryo/not yok — RUX Hub'dan ekleyince burada görünür.</div>`;
   $('d_body').innerHTML=h;
 
   $('d_body').querySelectorAll('[data-copy]').forEach(b=>{

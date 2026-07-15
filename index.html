@@ -130,6 +130,24 @@ body{background:var(--wall);font-family:'Inter',system-ui,sans-serif;color:var(-
 /* detail sheet */
 .dl{font-size:13px;color:var(--dim);margin:4px 0}
 .dl b{color:var(--cream);font-weight:600}
+/* --- detay: caption / senaryo / notlar (Hub'da yazılanı telefonda oku + kopyala) --- */
+#detSheet{max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.dsec{margin:14px 0 0}
+.dsec-h{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.dsec-t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);font-weight:700}
+.dcopy{background:rgba(212,175,98,.12);border:1px solid var(--line2);color:var(--gold);border-radius:9px;
+  padding:5px 11px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;flex:0 0 auto;transition:.15s}
+.dcopy:active{transform:scale(.97)}
+.dcopy.done{background:rgba(110,190,130,.16);border-color:rgba(110,190,130,.35);color:var(--ok)}
+.dtext{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px;
+  font-size:13.5px;line-height:1.6;color:var(--cream);white-space:pre-wrap;word-break:break-word;
+  max-height:38vh;overflow:auto;-webkit-user-select:text;user-select:text}
+.dtags{display:flex;flex-wrap:wrap;gap:6px}
+.dtag{background:rgba(212,175,98,.10);border:1px solid var(--line2);color:var(--gold);border-radius:8px;padding:3px 9px;font-size:11.5px}
+.dck{display:flex;gap:7px}
+.dck span{flex:1;text-align:center;background:var(--panel2);border:1px solid var(--line);border-radius:9px;
+  padding:7px 4px;font-size:11.5px;color:var(--dim)}
+.dck span.on{background:rgba(110,190,130,.12);border-color:rgba(110,190,130,.3);color:var(--ok)}
 .del{width:100%;background:rgba(224,122,107,.12);color:var(--danger);border:1px solid rgba(224,122,107,.35);
   border-radius:13px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;margin-top:14px}
 .del.confirm{background:var(--danger);color:#1a0d0a;border-color:var(--danger)}
@@ -214,6 +232,7 @@ body{background:var(--wall);font-family:'Inter',system-ui,sans-serif;color:var(-
 <div class="sheet" id="detSheet">
   <h3 id="d_title">—</h3>
   <div class="dl" id="d_meta"></div>
+  <div id="d_body"></div>
   <button class="del" id="delBtn">Sil</button>
   <button class="cancel" data-close>Kapat</button>
 </div>
@@ -425,15 +444,57 @@ $('saveBtn').onclick=async()=>{
 
 /* ---- detay + sil ---- */
 let curId=null;
+/* Hub'daki etiketlerle birebir (app.js STATUSES / APPROVALS) */
+const ST_L={fikir:'Fikir',hazirlaniyor:'Hazırlanıyor',hazir:'Hazır',paylasildi:'Paylaşıldı'};
+const AP_L={taslak:'Taslak',bekliyor:'Onay bekliyor',onaylandi:'Onaylandı',revize:'Revize iste'};
+const WHO_L={efe:'Efe',yasin:'Yasin',mert:'Mert',sevval:'Şevval',efeselim:'Efe Selim'};
+/* Uzun metin bloğu + Kopyala (caption'ı telefondan Instagram'a yapıştırmak için) */
+function dsec(title,text,key){
+  if(!text||!String(text).trim())return '';
+  return `<div class="dsec"><div class="dsec-h"><span class="dsec-t">${title}</span>`+
+    `<button class="dcopy" data-copy="${key}">Kopyala</button></div>`+
+    `<div class="dtext">${esc(text)}</div></div>`;
+}
+async function copyText(t){
+  try{ await navigator.clipboard.writeText(t); return true; }
+  catch(e){ try{ const ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');
+    ta.style.cssText='position:fixed;top:0;left:0;opacity:0';document.body.appendChild(ta);
+    ta.select();ta.setSelectionRange(0,t.length);const ok=document.execCommand('copy');ta.remove();return ok;
+  }catch(_){ return false; } }
+}
 function openDetail(id){
   const x=ALL.find(i=>i.id===id);if(!x)return;curId=id;
   $('d_title').textContent=x.title||'(başlıksız)';
   const d=new Date(x.date+'T00:00:00');
+  const plats=Array.isArray(x.platform)?x.platform.filter(Boolean):(x.platform?[x.platform]:[]);
   const meta=[`<b>${d.getDate()} ${AY[d.getMonth()]} ${d.getFullYear()}</b>${x.time?' · '+x.time:''}`,
-    'Kategori: <b>'+esc(x.kategori||'—')+'</b>',
-    'Durum: <b>'+(x.approval==='onaylandi'?'Onaylı':'Taslak')+'</b>',
-    x.assignee?'Atanan: <b>'+(x.assignee==='yasin'?'Yasin':'Efe')+'</b>':''].filter(Boolean);
+    'Tür: <b>'+esc(x.kategori||'—')+'</b>'+(plats.length?' · '+esc(plats.join(', ')):''),
+    'Durum: <b>'+esc(ST_L[x.status]||x.status||'Fikir')+'</b> · Onay: <b>'+esc(AP_L[x.approval]||x.approval||'Taslak')+'</b>',
+    x.assignee?'Atanan: <b>'+esc(WHO_L[x.assignee]||x.assignee)+'</b>':''].filter(Boolean);
   $('d_meta').innerHTML=meta.map(m=>`<div class="dl">${m}</div>`).join('');
+
+  let h=dsec('Caption',x.caption,'cap')+dsec('Senaryo notu',x.script,'scr')+dsec('Notlar',x.notes,'not');
+  const tags=Array.isArray(x.tags)?x.tags.filter(Boolean):[];
+  if(tags.length)h+=`<div class="dsec"><div class="dsec-h"><span class="dsec-t">Etiketler</span></div>`+
+    `<div class="dtags">${tags.map(t=>`<span class="dtag">${esc(t)}</span>`).join('')}</div></div>`;
+  const ck=x.checklist||{};
+  h+=`<div class="dsec"><div class="dsec-h"><span class="dsec-t">Hazırlık</span></div><div class="dck">`+
+    `<span class="${ck.caption?'on':''}">${ck.caption?'✓':'○'} Caption</span>`+
+    `<span class="${ck.gorsel?'on':''}">${ck.gorsel?'✓':'○'} Görsel</span>`+
+    `<span class="${ck.etiket?'on':''}">${ck.etiket?'✓':'○'} Etiket</span></div></div>`;
+  if(!x.caption&&!x.script&&!x.notes)h+=`<div class="dl" style="margin-top:12px">Bu içerikte henüz caption/senaryo/not yok — RUX Hub'dan ekleyince burada görünür.</div>`;
+  $('d_body').innerHTML=h;
+
+  $('d_body').querySelectorAll('[data-copy]').forEach(b=>{
+    b.onclick=async()=>{
+      const k=b.getAttribute('data-copy');
+      const t=k==='cap'?(x.caption||''):k==='scr'?(x.script||''):(x.notes||'');
+      const ok=await copyText(t);
+      if(!ok){toast('Kopyalanamadı — metne basılı tutup seç');return;}
+      b.classList.add('done');b.textContent='Kopyalandı ✓';toast('Kopyalandı ✓');
+      setTimeout(()=>{b.classList.remove('done');b.textContent='Kopyala';},1800);
+    };
+  });
   openSheet('detSheet');
 }
 const delBtn=$('delBtn');

@@ -1,5 +1,5 @@
 {
-  "version": "0.2.7",
-  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.2.7",
-  "notes": "Düzeltme: Düğün albümündeki İnce Ayar paneli alt menüyle çakışması giderildi (Mac). Albüm: otomatik kurulumda 4 fotoğraf yan yana dizilir + siyah-beyaz fotoğraflar otomatik tespit edilip ayrı sayfalara alınır."
+  "version": "0.4.0",
+  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.4.0",
+  "notes": "Oto In-Out akıllı montaj (Premiere): uzun çekimlerdeki sabit kadrajları otomatik bulup keser ve sekansa dizer — ffmpeg artık gömülü, Mac'te de çalışır. Yeni Pano: kaldığın yer kartı doğrudan müşteri çekirdeğine götürür. Müşteri haritasında pinler gerçek konumlarında. Instagram Feed'e artık gerçek içerik ekleniyor (+ Post / + Reels). Dock çift-tıkla genişler. Koyu tema artık gerçekten siyah-beyaz."
 }

@@ -121,6 +121,10 @@ body{background:var(--wall);font-family:'Inter',system-ui,sans-serif;color:var(-
 .seg button.on{background:rgba(212,175,98,.14);border-color:var(--gold);color:var(--gold)}
 .srow{display:flex;gap:11px}
 .srow .fld{flex:1}
+.seg.wrap{flex-wrap:wrap}
+.seg.wrap button{flex:1 1 40%;min-width:0;padding:9px 4px;font-size:12.5px}
+.dedit{margin:16px 0 4px;padding-top:14px;border-top:1px solid var(--line2)}
+.dedit-h{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);margin-bottom:11px}
 .save{width:100%;background:var(--gold);color:var(--ink);border:none;border-radius:13px;padding:14px;
   font-size:15px;font-weight:700;cursor:pointer;margin-top:6px;font-family:'Inter'}
 .save:active{transform:scale(.99)}
@@ -222,11 +226,27 @@ body{background:var(--wall);font-family:'Inter',system-ui,sans-serif;color:var(-
   <button class="cancel" data-close>Vazgeç</button>
 </div>
 
-<!-- detay/sil -->
+<!-- detay/düzenle/sil -->
 <div class="sheet" id="detSheet">
   <h3 id="d_title">—</h3>
   <div class="dl" id="d_meta"></div>
   <div id="d_body"></div>
+  <div class="dedit">
+    <div class="dedit-h">Hızlı düzenle</div>
+    <div class="fld"><label>Durum</label><div class="seg wrap" id="e_status">
+      <button data-v="fikir">Fikir</button><button data-v="hazirlaniyor">Hazırlanıyor</button><button data-v="hazir">Hazır</button><button data-v="paylasildi">Paylaşıldı</button>
+    </div></div>
+    <div class="fld"><label>Onay</label><div class="seg wrap" id="e_appr">
+      <button data-v="taslak">Taslak</button><button data-v="bekliyor">Bekliyor</button><button data-v="onaylandi">Onaylandı</button><button data-v="revize">Revize</button>
+    </div></div>
+    <div class="srow">
+      <div class="fld"><label>Saat</label><input id="e_time" type="time"></div>
+      <div class="fld"><label>Atanan</label><div class="seg wrap" id="e_who">
+        <button data-v="">—</button><button data-v="efe">Efe</button><button data-v="yasin">Yasin</button>
+      </div></div>
+    </div>
+    <button class="save" id="e_save">Değişiklikleri kaydet</button>
+  </div>
   <button class="del" id="delBtn">Sil</button>
   <button class="cancel" data-close>Kapat</button>
 </div>
@@ -405,7 +425,9 @@ $('scrim').onclick=closeSheets;
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeSheets);
 function seg(box){box.querySelectorAll('button').forEach(b=>b.onclick=()=>{box.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');});}
 seg($('f_kat'));seg($('f_who'));
+seg($('e_status'));seg($('e_appr'));seg($('e_who'));   /* detay hızlı-düzenle segmentleri */
 function segVal(box){const b=box.querySelector('button.on');return b?b.dataset.v:'';}
+function segSet(box,val){box.querySelectorAll('button').forEach(b=>b.classList.toggle('on',(b.dataset.v||'')===(val||'')));}
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200);}
 
 /* ---- ekle ---- */
@@ -481,6 +503,10 @@ function openDetail(id){
       setTimeout(()=>{b.classList.remove('done');b.textContent='Kopyala';},1800);
     };
   });
+  segSet($('e_status'),x.status||'fikir');   /* hızlı-düzenle: mevcut değerleri işaretle */
+  segSet($('e_appr'),x.approval||'taslak');
+  segSet($('e_who'),x.assignee||'');
+  $('e_time').value=x.time||'';
   openSheet('detSheet');
 }
 const delBtn=$('delBtn');
@@ -496,6 +522,28 @@ delBtn.onclick=async()=>{
     ALL=ALL.filter(i=>i.id!==curId);closeSheets();render();toast('Silindi');load();
   }catch(e){toast('Hata: '+e.message);}
   delBtn.disabled=false;delBtn.classList.remove('confirm');delBtn.textContent='Sil';
+};
+
+/* ---- hızlı düzenle: durum/onay/saat/atanan → buluta PATCH (masaüstü anlık senkronla görür) ---- */
+$('e_save').onclick=async()=>{
+  const x=ALL.find(i=>i.id===curId);if(!x)return;
+  const now=new Date().toISOString();
+  const upd=Object.assign({},x,{
+    status:segVal($('e_status'))||x.status||'fikir',
+    approval:segVal($('e_appr'))||x.approval||'taslak',
+    assignee:segVal($('e_who'))||null,
+    time:$('e_time').value||null,
+    updatedAt:now});
+  const b=$('e_save');b.disabled=true;b.textContent='Kaydediliyor…';
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/content?id=eq.${encodeURIComponent(curId)}`,{method:'PATCH',
+      headers:{...hdr(),'Content-Type':'application/json','Prefer':'return=minimal'},
+      body:JSON.stringify({data:upd,updated_at:now})});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const i=ALL.findIndex(z=>z.id===curId);if(i>=0)ALL[i]=upd;
+    closeSheets();render();toast('Güncellendi ✓');load();
+  }catch(e){toast('Hata: '+e.message);}
+  b.disabled=false;b.textContent='Değişiklikleri kaydet';
 };
 
 /* ---- refresh ---- */

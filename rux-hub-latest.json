@@ -1,5 +1,5 @@
 {
-  "version": "0.4.0",
-  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.4.0",
-  "notes": "Oto In-Out akıllı montaj (Premiere): uzun çekimlerdeki sabit kadrajları otomatik bulup keser ve sekansa dizer — ffmpeg artık gömülü, Mac'te de çalışır. Yeni Pano: kaldığın yer kartı doğrudan müşteri çekirdeğine götürür. Müşteri haritasında pinler gerçek konumlarında. Instagram Feed'e artık gerçek içerik ekleniyor (+ Post / + Reels). Dock çift-tıkla genişler. Koyu tema artık gerçekten siyah-beyaz."
+  "version": "0.4.12",
+  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.4.12",
+  "notes": "Yeni OBSIDIAN tasarım — Pano, Müşteriler ve İçerik Planlama grafit+altın HUD diline geçti. Müşteriler tek sayfada: harita + müşteri çekirdekleri + cortex dalış, sağda hızlı üretim kartı (Post/Story/Reels + Bu Ayı Planla). Yeni eklenti RUX Comp Aktarıcı (After Effects): kompozisyonu tüm bağımlılıklarıyla paketle, projeler/makineler arası taşı, otomatik relink. Kurgu paneline Sekans Aktarıcı: aktif sekansı tüm medyasıyla tek tık paketle — Project Manager açmana gerek yok. Eklentiler sekmesinden yeni panelleri tek tıkla kur."
 }

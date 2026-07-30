@@ -1,5 +1,5 @@
 {
-  "version": "0.4.13",
-  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.4.13",
-  "notes": "Mac düzeltmeleri + Komut Tekerleği kısayolu. Müşteriler: çekirdeğe tıkla → tam ekran cortex (harita+cortex artık yığılmıyor); Mac cortex kayması düzeldi. Komut Tekerleği kısayolu Ayarlar'dan atanabilir (FXConsole Ctrl+Space çakışmasını çöz). Premiere paneli Mac'te katalog bulunamadı düzeldi + ⌘/⌥ kısayol etiketleri. Bulut senkron Mac tepsideyken durmuyor."
+  "version": "0.4.15",
+  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.4.15",
+  "notes": "Çok-bilgisayar kütüphane düzeltmesi + paylaşımlı kapak deposu. Kütüphane: 'Katalog Seç' artık klasör seçtirir; başka bilgisayarda kütüphane klasörünü seçince dosya yolları otomatik düzelir ve Premiere/AE paneli de doğru okur ('dosya bulunamadı: D:\\...' bitti). Kapaklar: yüklenen kapaklar buluta gidip her makinede görünür; Ayarlar → Bulut Deposu → 'Kapakları Şimdi Eşitle' ile geçmiş kapaklar da yüklenir. Bulut deposu izin (RLS) düzeltmesi (to public)."
 }

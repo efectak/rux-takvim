@@ -1,5 +1,5 @@
 {
-  "version": "0.4.15",
-  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.4.15",
-  "notes": "Çok-bilgisayar kütüphane düzeltmesi + paylaşımlı kapak deposu. Kütüphane: 'Katalog Seç' artık klasör seçtirir; başka bilgisayarda kütüphane klasörünü seçince dosya yolları otomatik düzelir ve Premiere/AE paneli de doğru okur ('dosya bulunamadı: D:\\...' bitti). Kapaklar: yüklenen kapaklar buluta gidip her makinede görünür; Ayarlar → Bulut Deposu → 'Kapakları Şimdi Eşitle' ile geçmiş kapaklar da yüklenir. Bulut deposu izin (RLS) düzeltmesi (to public)."
+  "version": "0.4.37",
+  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.4.37",
+  "notes": "0.4.15'ten bu yana biriken büyük güncelleme: Instagram'a Hub'dan doğrudan paylaşım ve Paylaşım→Takvim otomatik kaydı, ekip profilleri ve yetkiler uygulama içinden, müşteri kartlarında yeni alanlar, çok sayıda hız ve kararlılık düzeltmesi. Site yönetimi (Site Masası) yalnız sahip profilinde görünür."
 }

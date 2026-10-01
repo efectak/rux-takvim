@@ -1,5 +1,5 @@
 {
-  "version": "0.4.37",
-  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.4.37",
-  "notes": "0.4.15'ten bu yana biriken büyük güncelleme: Instagram'a Hub'dan doğrudan paylaşım ve Paylaşım→Takvim otomatik kaydı, ekip profilleri ve yetkiler uygulama içinden, müşteri kartlarında yeni alanlar, çok sayıda hız ve kararlılık düzeltmesi. Site yönetimi (Site Masası) yalnız sahip profilinde görünür."
+  "version": "0.4.40",
+  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.4.40",
+  "notes": "Yaren ekibe katıldı: giriş ekranında kendi imzası. Müşteri haritası artık pencereyi dolduruyor ve üst üste binen pinler ayrılıyor. Komut Tekerleği Ayarlar'dan açılıp kapatılabiliyor."
 }

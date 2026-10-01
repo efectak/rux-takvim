@@ -1,5 +1,5 @@
 {
-  "version": "0.4.40",
-  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.4.40",
-  "notes": "Yaren ekibe katıldı: giriş ekranında kendi imzası. Müşteri haritası artık pencereyi dolduruyor ve üst üste binen pinler ayrılıyor. Komut Tekerleği Ayarlar'dan açılıp kapatılabiliyor."
+  "version": "0.4.41",
+  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.4.41",
+  "notes": "Bundan sonra güncellemeler Hub'ın içinden kuruluyor: Güncelle'ye bas, yönetici iznine Evet de, Hub yeni sürümle kendiliğinden açılır. Yaren'in giriş imzası eklendi; müşteri haritası ve Komut Tekerleği ayarı iyileştirildi."
 }

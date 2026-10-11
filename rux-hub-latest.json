@@ -1,5 +1,5 @@
 {
-  "version": "0.4.44",
-  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.4.44",
-  "notes": "Yeni: RUX Stüdyo. Albüm ve Post Tasarım artık tam ekran bir editörde açılıyor; çerçeve düzenleme, şablonlar, Son Projeler ve kaldığın yerden devam etme (otomatik taslak) eklendi. Güncelle'ye bas, yönetici iznine Evet de."
+  "version": "0.4.45",
+  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.4.45",
+  "notes": "RUX Stüdyo'ya üç yenilik: revize edilen sayfayı ayrı dışa aktarma (Kapsam: bu açılım / aralık), iki çerçevenin görselini yer değiştirme (sağ tık > Yer Değiştirmek İçin İşaretle) ve birden çok görseli birlikte kaydırma (Shift ile seç, Enter). Güncelle'ye bas, yönetici iznine Evet de."
 }

@@ -89,6 +89,11 @@ body{background:var(--wall);font-family:'Inter',system-ui,sans-serif;color:var(-
 .ico.reels{background:linear-gradient(150deg,#b98ed8,#6d44a0);color:#fff}
 .ico.post{background:linear-gradient(150deg,#6fa6dd,#345d8a);color:#fff}
 .ico.def{background:linear-gradient(150deg,#5a564e,#34312b);color:#cbbfa6}
+.ico.gorev{background:linear-gradient(150deg,#6fcf9a,#2f7d58);color:#fff}
+.ico.klip{background:linear-gradient(150deg,#e08fb0,#9a4570);color:#fff}
+.row.done{opacity:.6}
+.row.done .body .t{text-decoration:line-through;color:var(--dim)}
+.fld .hint{font-size:11.5px;color:var(--dim);margin-top:6px;line-height:1.4}
 .body{flex:1;min-width:0}
 .body .t{font-size:14.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .body .s{font-size:12px;color:var(--dim);margin-top:2px}
@@ -216,9 +221,11 @@ body{background:var(--wall);font-family:'Inter',system-ui,sans-serif;color:var(-
     <div class="fld"><label>Tarih</label><input id="f_date" type="date"></div>
     <div class="fld"><label>Saat (opsiyonel)</label><input id="f_time" type="time"></div>
   </div>
-  <div class="fld"><label>Kategori</label><div class="seg" id="f_kat">
+  <div class="fld"><label>Kategori</label><div class="seg wrap" id="f_kat">
     <button data-v="Çekim">Çekim</button><button data-v="Reels" class="on">Reels</button><button data-v="Post">Post</button>
-  </div></div>
+    <button data-v="Görev">Görev</button><button data-v="Düğün Hikayesi">Düğün Hikayesi</button><button data-v="Dış Çekim Klibi">Dış Çekim Klibi</button>
+  </div>
+  <div class="hint">Görev = paylaşım olmayan iş (QR menü yayını, site hazırlığı…)</div></div>
   <div class="fld"><label>Atanan (opsiyonel)</label><div class="seg" id="f_who">
     <button data-v="" class="on">—</button><button data-v="efe">Efe</button><button data-v="yasin">Yasin</button>
   </div></div>
@@ -233,10 +240,16 @@ body{background:var(--wall);font-family:'Inter',system-ui,sans-serif;color:var(-
   <div id="d_body"></div>
   <div class="dedit">
     <div class="dedit-h">Hızlı düzenle</div>
-    <div class="fld"><label>Durum</label><div class="seg wrap" id="e_status">
+    <div class="fld" id="e_cekim_f" style="display:none"><label>Çekim</label><div class="seg" id="e_cekim">
+      <button data-v="">Yapılmadı</button><button data-v="1">Çekim yapıldı ✓</button>
+    </div></div>
+    <div class="fld" id="e_status_f"><label>Durum</label><div class="seg wrap" id="e_status">
       <button data-v="fikir">Fikir</button><button data-v="hazirlaniyor">Hazırlanıyor</button><button data-v="hazir">Hazır</button><button data-v="paylasildi">Paylaşıldı</button>
     </div></div>
-    <div class="fld"><label>Onay</label><div class="seg wrap" id="e_appr">
+    <div class="fld" id="e_ns_f" style="display:none"><label>Paylaşım</label><div class="seg" id="e_ns">
+      <button data-v="">Paylaşılacak</button><button data-v="1">Paylaşılmayacak</button>
+    </div><div class="hint">Paylaşılmayacak = yalnız teslim; "paylaş" hatırlatması gelmez.</div></div>
+    <div class="fld" id="e_appr_f"><label>Onay</label><div class="seg wrap" id="e_appr">
       <button data-v="taslak">Taslak</button><button data-v="bekliyor">Bekliyor</button><button data-v="onaylandi">Onaylandı</button><button data-v="revize">Revize</button>
     </div></div>
     <div class="srow">
@@ -272,8 +285,16 @@ let ALL=[],viewStart=null,viewMonth=null,expanded=false,rangeStart=null,rangeEnd
 const hdr=()=>({apikey:SB_KEY,'Authorization':'Bearer '+SB_KEY});
 function esc(s){return String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
 function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
-function catClass(k){return k==='Çekim'?'cekim':k==='Reels'?'reels':k==='Post'?'post':'def';}
-function catIcon(k){return k==='Çekim'?'◎':k==='Reels'?'▶':k==='Post'?'▦':'•';}
+function catClass(k){return k==='Çekim'?'cekim':k==='Reels'?'reels':k==='Post'?'post':k==='Görev'?'gorev':(k==='Düğün Hikayesi'||k==='Dış Çekim Klibi')?'klip':'def';}
+function catIcon(k){return k==='Çekim'?'◎':k==='Reels'?'▶':k==='Post'?'▦':k==='Görev'?'✓':(k==='Düğün Hikayesi'||k==='Dış Çekim Klibi')?'♥':'•';}
+/* Tür kuralları (Hub app.js ile aynı): Çekim → "çekim yapıldı"; Görev → paylaşım DEĞİL iş; paylaşılmayacak → yalnız teslim */
+const isCekim=x=>!!x&&x.kategori==='Çekim';
+const isGorev=x=>!!x&&x.kategori==='Görev';
+const noShare=x=>!!x&&x.paylasilmayacak===true&&!isCekim(x)&&!isGorev(x);
+const ST_GOREV={fikir:'Yapılacak',hazirlaniyor:'Yapılıyor',hazir:'Hazır',paylasildi:'Tamamlandı'};
+const ST_TESLIM={fikir:'Kurgu bekliyor',hazirlaniyor:'Kurguda',hazir:'Hazır',paylasildi:'Teslim edildi'};
+function stLabel(x,s){ const m=isGorev(x)?ST_GOREV:noShare(x)?ST_TESLIM:null; return (m&&m[s])||ST_L[s]||s||'Fikir'; }
+function isDone(x){ return isCekim(x)?x.cekimYapildi===true:(isGorev(x)&&x.status==='paylasildi'); }
 
 async function load(){
   try{
@@ -409,12 +430,15 @@ async function setupNotif(){
 }
 function row(x,d,idx){
   const appr=x.approval==='onaylandi';
-  const sub=[x.time,x.kategori,x.assignee==='yasin'?'Yasin':x.assignee==='efe'?'Efe':''].filter(Boolean).join(' · ');
-  return `<div class="row" data-id="${esc(x.id)}" data-date="${x.date}" style="animation-delay:${Math.min(idx||0,10)*45}ms">
+  const durum=isCekim(x)?(x.cekimYapildi===true?'Çekim yapıldı':''):isGorev(x)?stLabel(x,x.status||'fikir'):noShare(x)?'paylaşılmayacak':'';
+  const sub=[x.time,x.kategori,durum,x.assignee==='yasin'?'Yasin':x.assignee==='efe'?'Efe':''].filter(Boolean).join(' · ');
+  /* sağdaki işaret: çekim/görevde "bitti mi", diğerlerinde onay kilidi */
+  const chip=(isCekim(x)||isGorev(x))?(isDone(x)?['ok','✓']:['lock','○']):(appr?['ok','✓']:['lock','🔒']);
+  return `<div class="row${isDone(x)?' done':''}" data-id="${esc(x.id)}" data-date="${x.date}" style="animation-delay:${Math.min(idx||0,10)*45}ms">
     <div class="date"><div class="m">${AY[d.getMonth()].slice(0,3)}</div><div class="d">${String(d.getDate()).padStart(2,'0')}</div></div>
     <div class="ico ${catClass(x.kategori)}">${catIcon(x.kategori)}</div>
     <div class="body"><div class="t">${esc(x.title||'(başlıksız)')}</div><div class="s">${esc(sub||'—')}</div></div>
-    <div class="chip ${appr?'ok':'lock'}">${appr?'✓':'🔒'}</div>
+    <div class="chip ${chip[0]}">${chip[1]}</div>
   </div>`;
 }
 
@@ -425,7 +449,14 @@ $('scrim').onclick=closeSheets;
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeSheets);
 function seg(box){box.querySelectorAll('button').forEach(b=>b.onclick=()=>{box.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');});}
 seg($('f_kat'));seg($('f_who'));
-seg($('e_status'));seg($('e_appr'));seg($('e_who'));   /* detay hızlı-düzenle segmentleri */
+seg($('e_status'));seg($('e_appr'));seg($('e_who'));seg($('e_cekim'));seg($('e_ns'));   /* detay hızlı-düzenle segmentleri */
+/* durum düğmelerinin adı türe göre (görev: Yapılacak/Yapılıyor…; paylaşılmayacak teslim: Kurgu bekliyor/Kurguda…) */
+function relabelStatus(){
+  const x=ALL.find(i=>i.id===curId);if(!x)return;
+  const t=Object.assign({},x,{paylasilmayacak:segVal($('e_ns'))==='1'});
+  $('e_status').querySelectorAll('button').forEach(b=>{b.textContent=stLabel(t,b.dataset.v);});
+}
+$('e_ns').querySelectorAll('button').forEach(b=>b.addEventListener('click',relabelStatus));
 function segVal(box){const b=box.querySelector('button.on');return b?b.dataset.v:'';}
 function segSet(box,val){box.querySelectorAll('button').forEach(b=>b.classList.toggle('on',(b.dataset.v||'')===(val||'')));}
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200);}
@@ -485,12 +516,13 @@ function openDetail(id){
   const plats=Array.isArray(x.platform)?x.platform.filter(Boolean):(x.platform?[x.platform]:[]);
   const meta=[`<b>${d.getDate()} ${AY[d.getMonth()]} ${d.getFullYear()}</b>${x.time?' · '+x.time:''}`,
     'Tür: <b>'+esc(x.kategori||'—')+'</b>'+(plats.length?' · '+esc(plats.join(', ')):''),
-    'Durum: <b>'+esc(ST_L[x.status]||x.status||'Fikir')+'</b> · Onay: <b>'+esc(AP_L[x.approval]||x.approval||'Taslak')+'</b>',
+    isCekim(x)?'Çekim: <b>'+(x.cekimYapildi===true?'yapıldı ✓':'henüz yapılmadı')+'</b>'
+      :'Durum: <b>'+esc(stLabel(x,x.status||'fikir'))+'</b>'+(isGorev(x)?'':' · Onay: <b>'+esc(AP_L[x.approval]||x.approval||'Taslak')+'</b>')+(noShare(x)?' · <b>paylaşılmayacak</b>':''),
     x.assignee?'Atanan: <b>'+esc(WHO_L[x.assignee]||x.assignee)+'</b>':''].filter(Boolean);
   $('d_meta').innerHTML=meta.map(m=>`<div class="dl">${m}</div>`).join('');
 
   let h=dsec('Caption',x.caption,'cap')+dsec('Senaryo notu',x.script,'scr')+dsec('Notlar',x.notes,'not');
-  if(!h)h=`<div class="dl" style="margin-top:12px">Bu içerikte henüz caption/senaryo/not yok — RUX Hub'dan ekleyince burada görünür.</div>`;
+  if(!h)h=`<div class="dl" style="margin-top:12px">${isCekim(x)||isGorev(x)?'Not yok — RUX Hub\'dan ekleyince burada görünür.':'Bu içerikte henüz caption/senaryo/not yok — RUX Hub\'dan ekleyince burada görünür.'}</div>`;
   $('d_body').innerHTML=h;
 
   $('d_body').querySelectorAll('[data-copy]').forEach(b=>{
@@ -503,6 +535,15 @@ function openDetail(id){
       setTimeout(()=>{b.classList.remove('done');b.textContent='Kopyala';},1800);
     };
   });
+  /* hızlı-düzenle: türe göre alanlar — çekimde "yapıldı" kutusu, görevde onay yok, paylaşılmayacak seçeneği */
+  const cek=isCekim(x),gor=isGorev(x);
+  $('e_cekim_f').style.display=cek?'':'none';
+  $('e_status_f').style.display=cek?'none':'';
+  $('e_appr_f').style.display=(cek||gor)?'none':'';
+  $('e_ns_f').style.display=(cek||gor)?'none':'';
+  segSet($('e_cekim'),x.cekimYapildi===true?'1':'');
+  segSet($('e_ns'),x.paylasilmayacak===true?'1':'');
+  relabelStatus();
   segSet($('e_status'),x.status||'fikir');   /* hızlı-düzenle: mevcut değerleri işaretle */
   segSet($('e_appr'),x.approval||'taslak');
   segSet($('e_who'),x.assignee||'');
@@ -528,11 +569,15 @@ delBtn.onclick=async()=>{
 $('e_save').onclick=async()=>{
   const x=ALL.find(i=>i.id===curId);if(!x)return;
   const now=new Date().toISOString();
+  const cek=isCekim(x),gor=isGorev(x);
   const upd=Object.assign({},x,{
     status:segVal($('e_status'))||x.status||'fikir',
     approval:segVal($('e_appr'))||x.approval||'taslak',
     assignee:segVal($('e_who'))||null,
     time:$('e_time').value||null,
+    /* Hub'la aynı: çekimde yalnız cekimYapildi, yayınlanabilir türlerde yalnız paylasilmayacak anlamlı */
+    cekimYapildi:(cek&&segVal($('e_cekim'))==='1')?true:null,
+    paylasilmayacak:(!cek&&!gor&&segVal($('e_ns'))==='1')?true:null,
     updatedAt:now});
   const b=$('e_save');b.disabled=true;b.textContent='Kaydediliyor…';
   try{

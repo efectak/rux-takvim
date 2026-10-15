@@ -1,5 +1,5 @@
 {
-  "version": "0.4.46",
-  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.4.46",
-  "notes": "Takvim yenilikleri: çekim yapıldı kutucuğu, Görev türü (QR menü, site gibi işler), Düğün Hikayesi / Dış Çekim Klibi türleri ve Paylaşılmayacak seçeneği, çekim yapıldı olunca kurgu kayıtlarının otomatik açılması, teslim gecikti uyarıları. Güncelle'ye bas, yönetici iznine Evet de."
+  "version": "0.4.54",
+  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.4.54",
+  "notes": "Post Tasarım: önceki postların küçük resimli listesi (otomatik kayıt), Hızlı / Usta iki modlu editör, Arka planı kaldır (PNG kesme), yeni Kütüphane arayüzü (SFX + Müzik) ve profil başına favoriler, Hızlı moddaki düğme düzeltmeleri. Güncelle'ye bas, yönetici iznine Evet de."
 }

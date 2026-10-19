@@ -1,5 +1,5 @@
 {
-  "version": "0.4.54",
-  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.4.54",
-  "notes": "Post Tasarım: önceki postların küçük resimli listesi (otomatik kayıt), Hızlı / Usta iki modlu editör, Arka planı kaldır (PNG kesme), yeni Kütüphane arayüzü (SFX + Müzik) ve profil başına favoriler, Hızlı moddaki düğme düzeltmeleri. Güncelle'ye bas, yönetici iznine Evet de."
+  "version": "0.4.55",
+  "url": "https://github.com/efectak/rux-takvim/releases/tag/hub-v0.4.55",
+  "notes": "Açık temada okunmayan yazılar giderildi (Post ve tüm Hub), yeni Yeşil tema, takvimde yeni GÖRÜŞME türü (sabah + 1 saat önce hatırlatma, yarın özeti). Güncelle'ye bas, yönetici iznine Evet de."
 }
